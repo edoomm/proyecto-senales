@@ -3,6 +3,8 @@ from SenalDiscreta import *
 # from math import ceil
 
 def convolucionar (x, h):
+    # Se verifica que tipo de convolucion es y se llama a la función 
+    # correspondiente
     if (not x.es_periodica()) and (not h.es_periodica()):
         return obtener_convolucion_finita(x, h)
     if (x.es_periodica()) and (not h.es_periodica()):
