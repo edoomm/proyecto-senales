@@ -6,7 +6,7 @@ class SenalDiscreta:
     def __init__(self, datos = [0], indice_inicio = 0, periodica = False):
         self.datos = datos
         self.indice_inicio = indice_inicio
-        self.periodica = periodica
+        self.periodica = periodica # Si es periodica -> True.   Si es finita -> False
 
     def es_periodica (self) -> bool:
         if ( self.periodica ):
@@ -31,6 +31,9 @@ class SenalDiscreta:
 
     def obtener_indice_inicio (self) -> int:
         return self.indice_inicio
+
+    def obtener_origen (self):
+        return self.indice_inicio * -1
 
     def asignar_indice_inicio (self, indice_inicio):
         self.indice_inicio = indice_inicio
