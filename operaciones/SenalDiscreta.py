@@ -1,8 +1,8 @@
 class SenalDiscreta:
 
     # Constructor
-    # Si no se envían argumentos, se asignan los valores por defecto
-    # Solo un dato = 0, indice de inicio = 0, tipo de señal = finita = no periódica
+    # Si no se envian argumentos, se asignan los valores por defecto
+    # Solo un dato = 0, indice de inicio = 0, tipo de senial = finita = no periodica
     def __init__(self, datos = [0], indice_inicio = 0, periodica = False):
         self.datos = datos
         self.indice_inicio = indice_inicio
