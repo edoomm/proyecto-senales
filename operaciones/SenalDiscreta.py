@@ -35,9 +35,6 @@ class SenalDiscreta:
     def obtener_origen (self):
         return self.indice_inicio * -1
 
-    def obtener_indice_fin (self):
-        return len(self.datos) - (self.indice_inicio * -1)
-
     def asignar_indice_inicio (self, indice_inicio):
         self.indice_inicio = indice_inicio
 
