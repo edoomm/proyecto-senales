@@ -33,7 +33,7 @@ def principal():
     ventana.mainloop()
 
 # Importamos el archivo que realizara la operación (puede ser tan sencillo o complejo como lo requiera la operación)
-from operacionSumaResta import * 
+import sumaresta as sr
 def sumar():
     """
     Función que realizará la suma y la obtendrá del archivo sumaresta.py
@@ -49,7 +49,7 @@ def sumar():
     # Realiza la operacion
     try:
         # manda a realizar la operación
-        yn = obtenerSuma(xn, hn)
+        yn = sr.obtenersuma(xn, hn)
         print("x(n):", xn)
         print("h(n):", hn)
         print("y(n):", yn)
