@@ -2,13 +2,18 @@ from tkinter import *
 import matplotlib.pyplot as plt
 from matplotlib import pyplot
 import numpy as np
-import os # libreria del sistema operativo
+
+# Archivos de uso común
+from senalDiscreta import *
+
+# Archivos que contienen las operaciones
+from operacionSuma import *
 
 ventana = Tk()
+
 #Entradas de los cuadros de texto al meter una
 #secuencia de datos
 #L= Left (Izquierda), O= Origen , R = Right(Derecha)
-
 xL = StringVar()
 xO = StringVar()
 xR = StringVar()
@@ -23,11 +28,14 @@ hR = StringVar()
 # en caso de que una tenga mas, se acompleta
 # con 0's ya sea a la izquierda o derecha
 # segun sea el caso
-newH = []
-newX = []
-ejeV = []
+newH = [] # Lista para h(n) de longitud estandar
+newX = [] # Lista para x(n) de longitud estandar
+puntosEjeH = [] # Lista que contiene los puntos en donde se graficaran las listas en el eje horizontal
 
 def crearVentana():
+
+    ''' Crea la GUI junto con el establecimiento de sus propiedades '''
+
     global ventana
     #Dimenciones de la pantalla
     ventana.geometry("700x650+350+60")
@@ -36,10 +44,16 @@ def crearVentana():
     ventana.resizable(width=True, height=False)
 
 def verInicio():
-    global ejeV,newX,newH
+
+    '''
+    Función para la GUI\n
+    Muestra los primeros controles correspondientes a la desición del método de entrada de valores
+    '''
+
+    global puntosEjeH,newX,newH
     newH = []
     newX = []
-    ejeV = []
+    puntosEjeH = []
 
 
     ###Cree estas variables para poder posicionar
@@ -73,45 +87,51 @@ def verInicio():
            font=("Arial", 19)).place(x=360, y=70)
 
     Button(ventana, text="Sumar", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumar,
+           bd=8, background="#ffb3cc", height=1, command=sumarOld,
            font=("Arial", 16)).place(x=xPosicion, y=espacio+yPosicion)
 
     Button(ventana, text="Restar", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumar,
+           bd=8, background="#ffb3cc", height=1, command=sumarOld,
            font=("Arial", 16)).place(x=xPosicion+97, y=espacio + yPosicion)
 
     #en command debe de diriguirte a la funcion correspondiente
     Button(ventana, text="Amplificación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumar,
+           bd=8, background="#ffb3cc", height=1, command=sumarOld,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*2+yPosicion)
 
     Button(ventana, text="Atenuación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumar,
+           bd=8, background="#ffb3cc", height=1, command=sumarOld,
            font=("Arial", 16)).place(x=xPosicion+160, y=espacio * 2 + yPosicion)
 
     Button(ventana, text="Reflejo", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumar,
+           bd=8, background="#ffb3cc", height=1, command=sumarOld,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*3+yPosicion)
 
     Button(ventana, text="Desplazamiento", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumar,
+           bd=8, background="#ffb3cc", height=1, command=sumarOld,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*4+yPosicion)
 
     Button(ventana, text="Diezmación/Interpolación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumar,
+           bd=8, background="#ffb3cc", height=1, command=sumarOld,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*5+yPosicion)
 
     Button(ventana, text="Convolución", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumar,
+           bd=8, background="#ffb3cc", height=1, command=sumarOld,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*6+yPosicion)
 
     Button(ventana, text="FFT", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumar,
+           bd=8, background="#ffb3cc", height=1, command=sumarOld,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*7+yPosicion)
 
     ventana.mainloop()
 
 def introducirValores():
+
+    '''
+    Función para la GUI\n
+    Cambia la ventana al modo de introducir valores con las 3 entradas para x(n) y las otras 3 para h(n)
+    '''
+
     xPosicion = 100
     yPosicion = 100
     espacio = 65
@@ -158,23 +178,23 @@ def introducirValores():
            font=("Arial", 16)).place(x=xPosicion + 97, y=espacio + yPosicion)
 
     Button(ventana, text="Amplificación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumar,
+           bd=8, background="#ffb3cc", height=1, command=sumarOld,
            font=("Arial", 16)).place(x=xPosicion, y=espacio * 2 + yPosicion)
 
     Button(ventana, text="Atenuación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumar,
+           bd=8, background="#ffb3cc", height=1, command=sumarOld,
            font=("Arial", 16)).place(x=xPosicion + 160, y=espacio * 2 + yPosicion)
 
     Button(ventana, text="Reflejo", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumar,
+           bd=8, background="#ffb3cc", height=1, command=sumarOld,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*3+yPosicion)
 
     Button(ventana, text="Desplazamiento", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumar,
+           bd=8, background="#ffb3cc", height=1, command=sumarOld,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*4+yPosicion)
 
     Button(ventana, text="Diezmación/Interpolación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumar,
+           bd=8, background="#ffb3cc", height=1, command=sumarOld,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*5+yPosicion)
 
     Button(ventana, text="Convolución", cursor="hand2",
@@ -182,13 +202,21 @@ def introducirValores():
            font=("Arial", 16)).place(x=xPosicion, y=espacio*6+yPosicion)
 
     Button(ventana, text="FFT", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumar,
+           bd=8, background="#ffb3cc", height=1, command=emparejarValores,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*7+yPosicion)
 
     ventana.mainloop()
 
-def sumar():
-    global ejeV, newX, newH
+def configurarPantalla(operacion, resx, resh, resg):
+    """
+    Configura la pantalla dependiendo que operación se haga
+
+    Parameters:
+        operacion (str): El título de la operación realizada
+        resx (str): La secuencia de la señal x(n) con formato {...,#,#,..}
+        resh (str): La secuencia de la señal h(n) con formato {...,#,#,..}
+        resg (str): La secuencia de la señal g(n) con formato {...,#,#,..}
+    """
     # Uso una imagen como fondo, debido a que es la
     # unica forma que encuentro para tapar la
     # ventana anterior, por lo que al crear un
@@ -196,11 +224,82 @@ def sumar():
     imagenFondo = PhotoImage(file="imgs/fondo.pgm")
     Label(ventana, image=imagenFondo).place(x=0, y=0)
 
-    #Con el boton regresa al inicio
+    #Coloca el boton regresa al inicio
     Button(ventana, text="↶", cursor="hand2",
            bd=10, background="#ff9aa2", height=0, command=verInicio,
            font=("Arial", 19)).place(x=5, y=5)
-    emparejarValores()
+
+    #Titulo de la operacion
+    Label(ventana, text=operacion,
+          font=("Arial", 45)).place(x=270, y=50)
+
+    Label(ventana, text=resx,
+          font=("Arial", 25)).place(x=50, y=150)
+
+    Label(ventana, text=resh,
+          font=("Arial", 25)).place(x=50, y=220)
+
+    Label(ventana, text=resg,
+          font=("Arial", 25)).place(x=50, y=290)
+
+def obtenerSecuencia(variable, senal):
+    """
+    Obtiene la secuencia de una señal dada
+
+    Parameters:
+        variable (str): La letra de la variable de la señal
+        senal (SenialDiscreta): La señal discreta
+
+    Returns:
+        str: Secuencia de una señal en formato {...,#,...}
+    """
+    secuencia = variable + "(n) = ["
+    for e in senal.obtener_datos():
+        if e != "":
+            secuencia = secuencia + str(e) + ","
+        else:
+            secuencia = secuencia + str(e)
+    secuencia = secuencia + "]"
+
+    return secuencia
+
+# Esta función será el modelo a seguir para las demas operaciones
+def sumar():
+    """
+    Comando asociado al botón "Sumar"
+    """
+    # Obtiene datos de GUI
+    senales = emparejarValores()
+    xn = senales[0]
+    hn = senales[1]
+    # Se realiza la operación
+    gn = obtenerSuma(xn, hn)
+
+    # Se configura la GUI
+    configurarPantalla("Suma", obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
+    # Grafica
+    # graficar(puntosEjeH, newX, newH, newX, "Suma")
+    graficar(puntosEjeH, xn.obtener_datos(), hn.obtener_datos(), gn.obtener_datos(), "Suma")
+
+    ventana.mainloop()
+
+def sumarOld():
+    """
+    Depreciado xD
+    """
+
+    global puntosEjeH, newX, newH
+    # Uso una imagen como fondo, debido a que es la
+    # unica forma que encuentro para tapar la
+    # ventana anterior, por lo que al crear un
+    # nuevo escenario, siempre se tiene que poner esto
+    imagenFondo = PhotoImage(file="imgs/fondo.pgm")
+    Label(ventana, image=imagenFondo).place(x=0, y=0)
+
+    #Coloca el boton regresa al inicio
+    Button(ventana, text="↶", cursor="hand2",
+           bd=10, background="#ff9aa2", height=0, command=verInicio,
+           font=("Arial", 19)).place(x=5, y=5)
 
     #Algoritmo exclusivo de esta operacion
     suma = []
@@ -248,11 +347,11 @@ def sumar():
 
     #Graficar, para ello los 5 arreglos deben
     #de tener la misma cantidad de elementos
-    graficar(ejeV,newX,newH,suma,"Suma")
+    graficar(puntosEjeH,newX,newH,suma,"Suma")
     ventana.mainloop()
 
 def restar():
-    global ejeV, newX, newH
+    global puntosEjeH, newX, newH
     # Uso una imagen como fondo, debido a que es la
     # unica forma que encuentro para tapar la
     # ventana anterior, por lo que al crear un
@@ -312,11 +411,20 @@ def restar():
 
     # Graficar, para ello los 5 arreglos deben
     # de tener la misma cantidad de elementos
-    graficar(ejeV, newX, newH, resta,"Resta")
+    graficar(puntosEjeH, newX, newH, resta,"Resta")
     ventana.mainloop()
 
+# TODO: Validar valores de las entradas
 def emparejarValores():
-    global ejeV,newX,newH
+    
+    '''Hace las listas correspondientes a x(n) y h(n) del mismo tamaño y las asigna newX y newH así como prepara los puntos en el eje horizontal de las gráficas para su posterior ploteo
+
+    Returns:
+        SenialDiscreta:Devuelve una tupla con objetos de SenialDiscreta que representan a x(n) (posición: 0) y h(n) (posición: 1)
+
+    '''
+
+    global puntosEjeH,newX,newH
     #la funcion split sirve para separar
     #la cadena cada vez que hay un
     #determinado caracter, aqui en es las ","
@@ -325,6 +433,10 @@ def emparejarValores():
     hRAux = hR.get().split(",")
     xRAux = xR.get().split(",")
 
+    # Se resetea newX, newH y puntosEjeH
+    newX = []
+    newH = []
+    puntosEjeH = []
 
     if len(hLAux)>len(xLAux):
         for i in range(len(hLAux)-len(xLAux)):
@@ -345,20 +457,19 @@ def emparejarValores():
         else:
             newH.append(float(0))
     newH.append(float(hO.get()))
-    print(len(newH))
 
     #Para guardar el origen se cuenta desde
     #el, y de cuentan la cantidad de elementos
     #a la izquierda etiquetandolos como se
     #encontrarian en la grafica
     for i in range(len(newH)):
-        ejeV.append(i*(-1))
+        puntosEjeH.append(i*(-1))
 
     #el arreglo se invierte debido a que en el
     #arreglo tenemos 0,-1,-2 por ejemplo, y se
     #debe de invertir para que quede como en una
     #grafica normal
-    ejeV.reverse()
+    puntosEjeH.reverse()
 
     for elemento in xRAux:
         if elemento != "":
@@ -377,31 +488,43 @@ def emparejarValores():
     if len(xRAux) > len(hRAux):
         for i in range(len(xRAux) - len(hRAux)):
             newH.append(float(0))
-    for i in range(len(newH)-len(ejeV)):
-        ejeV.append(i+1)
+    for i in range(len(newH)-len(puntosEjeH)):
+        puntosEjeH.append(i+1)
 
-def graficar(ejeV,newX,newH, resultado,operacion):
-    #ejeV se refiere al eje vertical
+    # Cálculo del centro de las listas
+    icentro = 0
+    if len(xLAux) != 0 and len(hLAux) != 0:
+        if len(xLAux) > len (hLAux):
+            icentro = len(xLAux)
+        else:
+            icentro = len(hLAux) 
+
+    xn = SenalDiscreta(newX, icentro)
+    hn = SenalDiscreta(newH, icentro)
+    return [xn, hn]
+
+def graficar(puntosEjeH,newX,newH, resultado,operacion):
+    #puntosEjeH se refiere al eje vertical
     #Los 4 arreglos deben de tener la misma cantida
     #de elementos
 
     #x(n) en la primera posicion
     plt.subplot(311)
-    markerline, stemlines, baseline = plt.stem(ejeV, newX, '-.')
+    markerline, stemlines, baseline = plt.stem(puntosEjeH, newX, '-.')
     pyplot.axhline(0, color="black")
     pyplot.axvline(0, color="black")
     plt.ylabel('x(n)')
 
     #h(n) en la segunda posicion
     plt.subplot(312)
-    markerline, stemlines, baseline = plt.stem(ejeV, newH, '-.')
+    markerline, stemlines, baseline = plt.stem(puntosEjeH, newH, '-.')
     pyplot.axhline(0, color="black")
     pyplot.axvline(0, color="black")
     plt.ylabel('h(n)')
 
     #g(n) en la tercer posicion
     plt.subplot(313)
-    markerline, stemlines, baseline = plt.stem(ejeV, resultado, '-.')
+    markerline, stemlines, baseline = plt.stem(puntosEjeH, resultado, '-.')
 
     # setting property of baseline with color red and linewidth 2
     plt.suptitle(operacion+' x(n) con h(n)')
