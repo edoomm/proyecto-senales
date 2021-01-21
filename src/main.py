@@ -8,6 +8,7 @@ from senalDiscreta import *
 
 # Archivos que contienen las operaciones
 from operacionSuma import *
+from operacionResta import *
 
 ventana = Tk()
 
@@ -273,13 +274,32 @@ def sumar():
     xn = senales[0]
     hn = senales[1]
     # Se realiza la operación
-    gn = obtenerSuma(xn, hn)
+    gn = obtenerSuma(xn, hn) # ------------------LINEA A CAMBIAR
 
+    operacion = "Suma" # ------------------------LINEA A CAMBIAR
     # Se configura la GUI
-    configurarPantalla("Suma", obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
+    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
     # Grafica
-    # graficar(puntosEjeH, newX, newH, newX, "Suma")
-    graficar(puntosEjeH, xn.obtener_datos(), hn.obtener_datos(), gn.obtener_datos(), "Suma")
+    graficar(puntosEjeH, xn.obtener_datos(), hn.obtener_datos(), gn.obtener_datos(), operacion)
+
+    ventana.mainloop()
+
+def restar():
+    """
+    Comando asociado al botón restar
+    """
+    # Obtiene datos de GUI
+    senales = emparejarValores()
+    xn = senales[0]
+    hn = senales[1]
+    # Se realiza la operación
+    gn = obtenerResta(xn, hn) # ------------------LINEA A CAMBIAR
+
+    operacion = "Restar" # -----------------------LINEA A CAMBIAR
+    # Se configura la GUI
+    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
+    # Grafica
+    graficar(puntosEjeH, xn.obtener_datos(), hn.obtener_datos(), gn.obtener_datos(), operacion)
 
     ventana.mainloop()
 
@@ -350,7 +370,8 @@ def sumarOld():
     graficar(puntosEjeH,newX,newH,suma,"Suma")
     ventana.mainloop()
 
-def restar():
+def restarOld():
+    """Depreciado"""
     global puntosEjeH, newX, newH
     # Uso una imagen como fondo, debido a que es la
     # unica forma que encuentro para tapar la
