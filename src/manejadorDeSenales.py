@@ -17,7 +17,3 @@ def obtenerSenalDiscretaDesdeAudio():
 
 def obtenerAudioDesdeSenalDiscreta(senal):
     write("src/salida.wav", Frec, np.array(senal.obtener_datos()))
-
-#CODIGO DE PRUEBA:
-# senal = obtenerSenalDiscretaDesdeAudio()
-# obtenerAudioDesdeSenalDiscreta(senal)
