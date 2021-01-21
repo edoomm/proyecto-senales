@@ -9,6 +9,8 @@ from senalDiscreta import *
 # Archivos que contienen las operaciones ----------------------------- AGREGAR AQUI SUS ARCHIVOS CORRESPONDIENTES A SUS OPERACIONES
 from operacionSuma import *
 from operacionResta import *
+from operacionReflejo import *
+from operacionConvolucion import *
 
 ventana = Tk()
 
@@ -350,9 +352,9 @@ def reflejar():
     xn = senales[0]
     hn = senales[1]
     # Se realiza la operación
-    gn = obtenerSuma(xn, hn) # ------------------LINEA A CAMBIAR
+    gn = obtener_reflejo(xn, 1) # ------------------LINEA A CAMBIAR
 
-    operacion = "Suma" # ------------------------LINEA A CAMBIAR
+    operacion = "Reflejar" # ------------------------LINEA A CAMBIAR
     # Se configura la GUI
     configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
     # Grafica
@@ -427,9 +429,9 @@ def convolusionar():
     xn = senales[0]
     hn = senales[1]
     # Se realiza la operación
-    gn = obtenerSuma(xn, hn) # ------------------LINEA A CAMBIAR
+    gn = convolucionar(xn, hn) # ------------------LINEA A CAMBIAR
 
-    operacion = "Suma" # ------------------------LINEA A CAMBIAR
+    operacion = "Convolución" # ------------------------LINEA A CAMBIAR
     # Se configura la GUI
     configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
     # Grafica
