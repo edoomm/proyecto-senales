@@ -25,6 +25,14 @@ hL = StringVar()
 hO = StringVar()
 hR = StringVar()
 
+# Variables para las periocidades
+
+xesperiodica = BooleanVar()
+hesperiodica = BooleanVar()
+
+# Varibles para operaciones particulares
+opcionreflejo = IntVar() # Opción para decidir en que eje se reflejara
+
 # Con el siguiente algoritmo lo que se hace
 # es hacer tanto x(n) como h(n) tengan la
 # misma cantidad de elementos en el arreglo
@@ -57,15 +65,6 @@ def verInicio():
     newH = []
     newX = []
     puntosEjeH = []
-
-
-    ###Cree estas variables para poder posicionar
-    #de una mejor forma los botones
-    #de las funciones basicas
-    xPosicion = 100
-    yPosicion = 100
-    espacio = 65
-
     #Uso una imagen como fondo, debido a que es la
     #unica forma que encuentro para tapar la
     #ventana anterior, por lo que al crear un
@@ -89,43 +88,6 @@ def verInicio():
            bd=10, background="#b5ead7", height=0, command=introducirValores,
            font=("Arial", 19)).place(x=360, y=70)
 
-    Button(ventana, text="Sumar", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1,
-           font=("Arial", 16)).place(x=xPosicion, y=espacio+yPosicion)
-
-    Button(ventana, text="Restar", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1,
-           font=("Arial", 16)).place(x=xPosicion+97, y=espacio + yPosicion)
-
-    #en command debe de diriguirte a la funcion correspondiente
-    Button(ventana, text="Amplificación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1,
-           font=("Arial", 16)).place(x=xPosicion, y=espacio*2+yPosicion)
-
-    Button(ventana, text="Atenuación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1,
-           font=("Arial", 16)).place(x=xPosicion+160, y=espacio * 2 + yPosicion)
-
-    Button(ventana, text="Reflejo", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1,
-           font=("Arial", 16)).place(x=xPosicion, y=espacio*3+yPosicion)
-
-    Button(ventana, text="Desplazamiento", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1,
-           font=("Arial", 16)).place(x=xPosicion, y=espacio*4+yPosicion)
-
-    Button(ventana, text="Diezmación/Interpolación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1,
-           font=("Arial", 16)).place(x=xPosicion, y=espacio*5+yPosicion)
-
-    Button(ventana, text="Convolución", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1,
-           font=("Arial", 16)).place(x=xPosicion, y=espacio*6+yPosicion)
-
-    Button(ventana, text="FFT", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1,
-           font=("Arial", 16)).place(x=xPosicion, y=espacio*7+yPosicion)
-
     ventana.mainloop()
 
 def introducirValores():
@@ -144,33 +106,33 @@ def introducirValores():
 
     Button(ventana, text="↶", cursor="hand2",
            bd=10, background="#ff9aa2", height=0, command=verInicio,
-           font=("Arial", 19)).place(x=5, y=5)
+           font=("Arial", 15)).place(x=2, y=5)
 
 
     Label(ventana, text="x(n){",
-          font=("Arial", 25)).place(x=100, y=15)
+          font=("Arial", 25)).place(x=50, y=15)
     Entry(ventana,justify=RIGHT, textvariable=xL, width=10,
-          font=("Arial", 25)).place(x=180, y=20)
+          font=("Arial", 25)).place(x=130, y=20)
     Entry(ventana, textvariable=xO, width=2,
-          font=("Arial", 25)).place(x=380, y=20)
+          font=("Arial", 25)).place(x=330, y=20)
     Entry(ventana, textvariable=xR, width=10,
-          font=("Arial", 25)).place(x=435, y=20)
+          font=("Arial", 25)).place(x=385, y=20)
     Label(ventana, text="}",
-          font=("Arial", 25)).place(x=630, y=15)
+          font=("Arial", 25)).place(x=580, y=15)
 
     Label(ventana, text="h(n){",
-          font=("Arial", 25)).place(x=100, y=75)
+          font=("Arial", 25)).place(x=50, y=75)
     Entry(ventana, justify=RIGHT, textvariable=hL, width=10,
-          font=("Arial", 25)).place(x=180, y=80)
+          font=("Arial", 25)).place(x=130, y=80)
     Entry(ventana, textvariable=hO, width=2,
-          font=("Arial", 25)).place(x=380, y=80)
+          font=("Arial", 25)).place(x=330, y=80)
     Entry(ventana, textvariable=hR, width=10,
-          font=("Arial", 25)).place(x=435, y=80)
+          font=("Arial", 25)).place(x=385, y=80)
     Label(ventana, text="}",
-          font=("Arial", 25)).place(x=630, y=75)
+          font=("Arial", 25)).place(x=580, y=75)
 
     Label(ventana, text="ORIGEN",
-          font=("Arial", 10)).place(x=372, y=62)
+          font=("Arial", 10)).place(x=322, y=62)
 
     Button(ventana, text="Sumar", cursor="hand2",
            bd=8, background="#ffb3cc", height=1, command=sumar,
@@ -192,6 +154,9 @@ def introducirValores():
            bd=8, background="#ffb3cc", height=1, command=reflejar,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*3+yPosicion)
 
+    Entry(ventana, textvariable=opcionreflejo, width=1, font=("Arial",20)).place(x=xPosicion+115, y=espacio*3+yPosicion+10)
+    Label(ventana, text="Opción (0: Reflejo en x; 1: Reflejo en y)", font=("Arial", 15)).place(x=xPosicion+145, y=espacio*3+yPosicion+10)
+
     Button(ventana, text="Desplazamiento", cursor="hand2",
            bd=8, background="#ffb3cc", height=1, command=desplazar,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*4+yPosicion)
@@ -208,7 +173,19 @@ def introducirValores():
            bd=8, background="#ffb3cc", height=1, command=fft,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*7+yPosicion)
 
+    Button(ventana, text="Pruebas", command=tests).place(x=xPosicion+15, y=espacio*8+yPosicion)
+
+    #Checkboxes
+    Checkbutton(ventana, text="Periodica", variable=xesperiodica).place(x=615, y=25)
+    Checkbutton(ventana, text="Periodica", variable=hesperiodica).place(x=615, y=85)
+
     ventana.mainloop()
+
+def tests():
+    """
+    Función para hacer pruebas solamente
+    """
+    print(xesperiodica.get())
 
 def configurarPantalla(operacion, resx, resh, resg):
     """
@@ -543,8 +520,8 @@ def emparejarValores():
         else:
             icentro = len(hLAux) 
 
-    xn = SenalDiscreta(newX, icentro)
-    hn = SenalDiscreta(newH, icentro)
+    xn = SenalDiscreta(newX, icentro, xesperiodica.get())
+    hn = SenalDiscreta(newH, icentro, hesperiodica.get())
     return [xn, hn]
 
 def graficar(puntosEjeH,newX,newH, resultado,operacion):
