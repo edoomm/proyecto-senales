@@ -6,7 +6,7 @@ import numpy as np
 # Archivos de uso común
 from senalDiscreta import *
 
-# Archivos que contienen las operaciones
+# Archivos que contienen las operaciones ----------------------------- AGREGAR AQUI SUS ARCHIVOS CORRESPONDIENTES A SUS OPERACIONES
 from operacionSuma import *
 from operacionResta import *
 
@@ -88,40 +88,40 @@ def verInicio():
            font=("Arial", 19)).place(x=360, y=70)
 
     Button(ventana, text="Sumar", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumarOld,
+           bd=8, background="#ffb3cc", height=1,
            font=("Arial", 16)).place(x=xPosicion, y=espacio+yPosicion)
 
     Button(ventana, text="Restar", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumarOld,
+           bd=8, background="#ffb3cc", height=1,
            font=("Arial", 16)).place(x=xPosicion+97, y=espacio + yPosicion)
 
     #en command debe de diriguirte a la funcion correspondiente
     Button(ventana, text="Amplificación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumarOld,
+           bd=8, background="#ffb3cc", height=1,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*2+yPosicion)
 
     Button(ventana, text="Atenuación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumarOld,
+           bd=8, background="#ffb3cc", height=1,
            font=("Arial", 16)).place(x=xPosicion+160, y=espacio * 2 + yPosicion)
 
     Button(ventana, text="Reflejo", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumarOld,
+           bd=8, background="#ffb3cc", height=1,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*3+yPosicion)
 
     Button(ventana, text="Desplazamiento", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumarOld,
+           bd=8, background="#ffb3cc", height=1,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*4+yPosicion)
 
     Button(ventana, text="Diezmación/Interpolación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumarOld,
+           bd=8, background="#ffb3cc", height=1,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*5+yPosicion)
 
     Button(ventana, text="Convolución", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumarOld,
+           bd=8, background="#ffb3cc", height=1,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*6+yPosicion)
 
     Button(ventana, text="FFT", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumarOld,
+           bd=8, background="#ffb3cc", height=1,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*7+yPosicion)
 
     ventana.mainloop()
@@ -179,31 +179,31 @@ def introducirValores():
            font=("Arial", 16)).place(x=xPosicion + 97, y=espacio + yPosicion)
 
     Button(ventana, text="Amplificación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumarOld,
+           bd=8, background="#ffb3cc", height=1, command=amplificar,
            font=("Arial", 16)).place(x=xPosicion, y=espacio * 2 + yPosicion)
 
     Button(ventana, text="Atenuación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumarOld,
+           bd=8, background="#ffb3cc", height=1, command=atenuar,
            font=("Arial", 16)).place(x=xPosicion + 160, y=espacio * 2 + yPosicion)
 
     Button(ventana, text="Reflejo", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumarOld,
+           bd=8, background="#ffb3cc", height=1, command=reflejar,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*3+yPosicion)
 
     Button(ventana, text="Desplazamiento", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumarOld,
+           bd=8, background="#ffb3cc", height=1, command=desplazar,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*4+yPosicion)
 
     Button(ventana, text="Diezmación/Interpolación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumarOld,
+           bd=8, background="#ffb3cc", height=1, command=diezmar,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*5+yPosicion)
 
     Button(ventana, text="Convolución", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=sumar,
+           bd=8, background="#ffb3cc", height=1, command=convolusionar,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*6+yPosicion)
 
     Button(ventana, text="FFT", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=emparejarValores,
+           bd=8, background="#ffb3cc", height=1, command=fft,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*7+yPosicion)
 
     ventana.mainloop()
@@ -303,136 +303,157 @@ def restar():
 
     ventana.mainloop()
 
-def sumarOld():
+def amplificar():
     """
-    Depreciado xD
+    Comando asociado al botón "Amplificar"
     """
+    # Obtiene datos de GUI
+    senales = emparejarValores()
+    xn = senales[0]
+    hn = senales[1]
+    # Se realiza la operación
+    gn = obtenerSuma(xn, hn) # ------------------LINEA A CAMBIAR
 
-    global puntosEjeH, newX, newH
-    # Uso una imagen como fondo, debido a que es la
-    # unica forma que encuentro para tapar la
-    # ventana anterior, por lo que al crear un
-    # nuevo escenario, siempre se tiene que poner esto
-    imagenFondo = PhotoImage(file="imgs/fondo.pgm")
-    Label(ventana, image=imagenFondo).place(x=0, y=0)
+    operacion = "Suma" # ------------------------LINEA A CAMBIAR
+    # Se configura la GUI
+    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
+    # Grafica
+    graficar(puntosEjeH, xn.obtener_datos(), hn.obtener_datos(), gn.obtener_datos(), operacion)
 
-    #Coloca el boton regresa al inicio
-    Button(ventana, text="↶", cursor="hand2",
-           bd=10, background="#ff9aa2", height=0, command=verInicio,
-           font=("Arial", 19)).place(x=5, y=5)
-
-    #Algoritmo exclusivo de esta operacion
-    suma = []
-    for i in range(len(newX)):
-        suma.append(newX[i]+newH[i])
-
-    #Se imprimen los arreglos emparejados
-    #y el resultado
-    resultadoX = "x(n){"
-    for e in newX:
-        if e != "":
-            resultadoX = resultadoX + str(e) + ","
-        else:
-            resultadoX = resultadoX + str(e)
-    resultadoX = resultadoX + "}"
-
-    resultadoH = "h(n){"
-    for e in newH:
-        if e != "":
-            resultadoH = resultadoH + str(e) + ","
-        else:
-            resultadoH = resultadoH + str(e)
-    resultadoH = resultadoH + "}"
-
-    resultadoSuma = "g(n){"
-    for e in suma:
-        if e != "":
-            resultadoSuma = resultadoSuma+str(e)+","
-        else:
-            resultadoSuma = resultadoSuma + str(e)
-    resultadoSuma = resultadoSuma+"}"
-
-    #Titulo de la operacion
-    Label(ventana, text="SUMA",
-          font=("Arial", 45)).place(x=270, y=50)
-
-    Label(ventana, text=resultadoX,
-          font=("Arial", 25)).place(x=50, y=150)
-
-    Label(ventana, text=resultadoH,
-          font=("Arial", 25)).place(x=50, y=220)
-
-    Label(ventana, text=resultadoSuma,
-          font=("Arial", 25)).place(x=50, y=290)
-
-    #Graficar, para ello los 5 arreglos deben
-    #de tener la misma cantidad de elementos
-    graficar(puntosEjeH,newX,newH,suma,"Suma")
     ventana.mainloop()
 
-def restarOld():
-    """Depreciado"""
-    global puntosEjeH, newX, newH
-    # Uso una imagen como fondo, debido a que es la
-    # unica forma que encuentro para tapar la
-    # ventana anterior, por lo que al crear un
-    # nuevo escenario, siempre se tiene que poner esto
-    imagenFondo = PhotoImage(file="imgs/fondo.pgm")
-    Label(ventana, image=imagenFondo).place(x=0, y=0)
+def atenuar():
+    """
+    Comando asociado al botón "Atenuar"
+    """
+    # Obtiene datos de GUI
+    senales = emparejarValores()
+    xn = senales[0]
+    hn = senales[1]
+    # Se realiza la operación
+    gn = obtenerSuma(xn, hn) # ------------------LINEA A CAMBIAR
 
-    # Con el boton regresa al inicio
-    Button(ventana, text="↶", cursor="hand2",
-           bd=10, background="#ff9aa2", height=0, command=verInicio,
-           font=("Arial", 19)).place(x=5, y=5)
-    emparejarValores()
+    operacion = "Suma" # ------------------------LINEA A CAMBIAR
+    # Se configura la GUI
+    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
+    # Grafica
+    graficar(puntosEjeH, xn.obtener_datos(), hn.obtener_datos(), gn.obtener_datos(), operacion)
 
-    # Algoritmo exclusivo de esta operacion
-    resta = []
-    for i in range(len(newX)):
-        resta.append(newX[i] - newH[i])
+    ventana.mainloop()
 
-    # Se imprimen los arreglos emparejados
-    # y el resultado
-    resultadoX = "x(n){"
-    for e in newX:
-        if e != "":
-            resultadoX = resultadoX + str(e) + ","
-        else:
-            resultadoX = resultadoX + str(e)
-    resultadoX = resultadoX + "}"
+def reflejar():
+    """
+    Comando asociado al botón "reflejar"
+    """
+    # Obtiene datos de GUI
+    senales = emparejarValores()
+    xn = senales[0]
+    hn = senales[1]
+    # Se realiza la operación
+    gn = obtenerSuma(xn, hn) # ------------------LINEA A CAMBIAR
 
-    resultadoH = "h(n){"
-    for e in newH:
-        if e != "":
-            resultadoH = resultadoH + str(e) + ","
-        else:
-            resultadoH = resultadoH + str(e)
-    resultadoH = resultadoH + "}"
+    operacion = "Suma" # ------------------------LINEA A CAMBIAR
+    # Se configura la GUI
+    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
+    # Grafica
+    graficar(puntosEjeH, xn.obtener_datos(), hn.obtener_datos(), gn.obtener_datos(), operacion)
 
-    resultado = "g(n){"
-    for e in resta:
-        if e != "":
-            resultado = resultado + str(e) + ","
-        else:
-            resultado = resultado + str(e)
-    resultado = resultado + "}"
+    ventana.mainloop()
 
-    # Titulo de la operacion
-    Label(ventana, text="Resta",
-          font=("Arial", 45)).place(x=270, y=50)
+def desplazar():
+    """
+    Comando asociado al botón "Desplazar"
+    """
+    # Obtiene datos de GUI
+    senales = emparejarValores()
+    xn = senales[0]
+    hn = senales[1]
+    # Se realiza la operación
+    gn = obtenerSuma(xn, hn) # ------------------LINEA A CAMBIAR
 
-    Label(ventana, text=resultadoX,
-          font=("Arial", 25)).place(x=50, y=150)
+    operacion = "Suma" # ------------------------LINEA A CAMBIAR
+    # Se configura la GUI
+    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
+    # Grafica
+    graficar(puntosEjeH, xn.obtener_datos(), hn.obtener_datos(), gn.obtener_datos(), operacion)
 
-    Label(ventana, text=resultadoH,
-          font=("Arial", 25)).place(x=50, y=220)
+    ventana.mainloop()
 
-    Label(ventana, text=resultado,
-          font=("Arial", 25)).place(x=50, y=290)
+def diezmar():
+    """
+    Comando asociado al botón "Diezmación"
+    """
+    # Obtiene datos de GUI
+    senales = emparejarValores()
+    xn = senales[0]
+    hn = senales[1]
+    # Se realiza la operación
+    gn = obtenerSuma(xn, hn) # ------------------LINEA A CAMBIAR
 
-    # Graficar, para ello los 5 arreglos deben
-    # de tener la misma cantidad de elementos
-    graficar(puntosEjeH, newX, newH, resta,"Resta")
+    operacion = "Suma" # ------------------------LINEA A CAMBIAR
+    # Se configura la GUI
+    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
+    # Grafica
+    graficar(puntosEjeH, xn.obtener_datos(), hn.obtener_datos(), gn.obtener_datos(), operacion)
+
+    ventana.mainloop()
+
+def interpolar():
+    """
+    Comando asociado al botón "Interpolar"
+    """
+    # Obtiene datos de GUI
+    senales = emparejarValores()
+    xn = senales[0]
+    hn = senales[1]
+    # Se realiza la operación
+    gn = obtenerSuma(xn, hn) # ------------------LINEA A CAMBIAR
+
+    operacion = "Suma" # ------------------------LINEA A CAMBIAR
+    # Se configura la GUI
+    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
+    # Grafica
+    graficar(puntosEjeH, xn.obtener_datos(), hn.obtener_datos(), gn.obtener_datos(), operacion)
+
+    ventana.mainloop()
+
+# La falta de ortografia es adrede, porque ya existe la función sin falta de ortografia jaja
+def convolusionar():
+    """
+    Comando asociado al botón "Convolución"
+    """
+    # Obtiene datos de GUI
+    senales = emparejarValores()
+    xn = senales[0]
+    hn = senales[1]
+    # Se realiza la operación
+    gn = obtenerSuma(xn, hn) # ------------------LINEA A CAMBIAR
+
+    operacion = "Suma" # ------------------------LINEA A CAMBIAR
+    # Se configura la GUI
+    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
+    # Grafica
+    graficar(puntosEjeH, xn.obtener_datos(), hn.obtener_datos(), gn.obtener_datos(), operacion)
+
+    ventana.mainloop()
+
+def fft():
+    """
+    Comando asociado al botón "FFT"
+    """
+    # Obtiene datos de GUI
+    senales = emparejarValores()
+    xn = senales[0]
+    hn = senales[1]
+    # Se realiza la operación
+    gn = obtenerSuma(xn, hn) # ------------------LINEA A CAMBIAR
+
+    operacion = "Suma" # ------------------------LINEA A CAMBIAR
+    # Se configura la GUI
+    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
+    # Grafica
+    graficar(puntosEjeH, xn.obtener_datos(), hn.obtener_datos(), gn.obtener_datos(), operacion)
+
     ventana.mainloop()
 
 # TODO: Validar valores de las entradas
