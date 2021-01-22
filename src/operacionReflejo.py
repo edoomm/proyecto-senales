@@ -4,7 +4,7 @@ def obtener_reflejo(senal, tipoReflejo):
     if(tipoReflejo==1):     #Para reflejo sobre el eje X
         datosAux = senal.obtener_datos()
         for i in range(len(datosAux)):
-            datosAux[i] = datosAux[i] * -1
+            datosAux[i] = datosAux[i] * -1 #Voltea la secuencia de valores
         return SenalDiscreta(datosAux, senal.obtener_indice_inicio(), senal.es_periodica())
     elif(tipoReflejo==2):   #Para reflejo sobre el eje y
         datosAux = senal.obtener_datos()[::-1]

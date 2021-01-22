@@ -142,20 +142,20 @@ def introducirValores():
            bd=8, background="#ffb3cc", height=1, command=restar,
            font=("Arial", 16)).place(x=xPosicion + 97, y=espacio + yPosicion)
 
-    Button(ventana, text="Amplificación", cursor="hand2",
+    Button(ventana, text="Amplificación / Atenuación", cursor="hand2",
            bd=8, background="#ffb3cc", height=1, command=amplificar,
            font=("Arial", 16)).place(x=xPosicion, y=espacio * 2 + yPosicion)
 
-    Button(ventana, text="Atenuación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=atenuar,
-           font=("Arial", 16)).place(x=xPosicion + 160, y=espacio * 2 + yPosicion)
-
-    Button(ventana, text="Reflejo", cursor="hand2",
+    Button(ventana, text="Reflejo en X", cursor="hand2",
            bd=8, background="#ffb3cc", height=1, command=reflejar,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*3+yPosicion)
 
-    Entry(ventana, textvariable=opcionreflejo, width=1, font=("Arial",20)).place(x=xPosicion+115, y=espacio*3+yPosicion+10)
-    Label(ventana, text="Opción (0: Reflejo en x; 1: Reflejo en y)", font=("Arial", 15)).place(x=xPosicion+145, y=espacio*3+yPosicion+10)
+    Button(ventana, text="Reflejo en Y", cursor="hand2",
+           bd=8, background="#ffb3cc", height=1, command=reflejar,
+           font=("Arial", 16)).place(x=xPosicion+160, y=espacio*3+yPosicion)       #Esperen xd
+
+  #  Entry(ventana, textvariable=opcionreflejo, width=1, font=("Arial",20)).place(x=xPosicion+115, y=espacio*3+yPosicion+10)
+   # Label(ventana, text="Opción (0: Reflejo en x; 1: Reflejo en y)", font=("Arial", 15)).place(x=xPosicion+145, y=espacio*3+yPosicion+10)
 
     Button(ventana, text="Desplazamiento", cursor="hand2",
            bd=8, background="#ffb3cc", height=1, command=desplazar,
