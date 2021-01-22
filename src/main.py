@@ -383,7 +383,7 @@ def reflejar():
     ventana.mainloop()
 
 """
-Cree otra función para reflejar al mismo tiempo en X e Y,
+Hice otra función para reflejar al mismo tiempo en X e Y,
 la funcion anterior daba algunos errores y esta trata de corregirlos
 """
 def reflejarEnXyY():
