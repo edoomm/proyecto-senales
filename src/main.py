@@ -152,7 +152,7 @@ def introducirValores():
 
     Button(ventana, text="Reflejo en Y", cursor="hand2",
            bd=8, background="#ffb3cc", height=1, command=reflejar,
-           font=("Arial", 16)).place(x=xPosicion+160, y=espacio*3+yPosicion)       
+           font=("Arial", 16)).place(x=xPosicion+160, y=espacio*3+yPosicion)       #Esperen xd
 
   #  Entry(ventana, textvariable=opcionreflejo, width=1, font=("Arial",20)).place(x=xPosicion+115, y=espacio*3+yPosicion+10)
    # Label(ventana, text="Opción (0: Reflejo en x; 1: Reflejo en y)", font=("Arial", 15)).place(x=xPosicion+145, y=espacio*3+yPosicion+10)
