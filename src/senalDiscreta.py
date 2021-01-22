@@ -41,9 +41,9 @@ class SenalDiscreta:
     def asignar_indice_inicio (self, indice_inicio):
         self.indice_inicio = indice_inicio
 
-    # Se expanden los datos dependiendo de la senial.
-    # Si es finita, se agregan 0s para hacerla de tamanio n
-    # Si es periodica, se repiten los valores para obtener una gráfica de tamanio n
+    # Se ajustan los tamanios de las seniales para que las dos tengan el mismo
+    # tamanio y el mismo origen. Se modifican la señal local como la que se manda
+    # por parametro
     def empatar (self, senial_discreta ):
         origen_1, origen_2 = self.obtener_origen(), senial_discreta.obtener_origen()
         longitud_1, longuitud_2 = self.obtener_longitud(), senial_discreta.obtener_longitud()
@@ -79,6 +79,9 @@ class SenalDiscreta:
             #senial_discreta.asignar_datos(auxiliar)
             senial_discreta.expandir_derecha(diferencia_derecha)
 
+    # Expande la senial hacia la izquierda. Se inserta la cantidad de "longitud" elementos
+    # a la izquierda. Si es periodica, se expande según el periodo, y si es finita se
+    # insertan 0s
     def expandir_izquierda (self, longitud):
         auxiliar = [0] * longitud
         origen = self.obtener_origen()
@@ -91,6 +94,9 @@ class SenalDiscreta:
             self.datos = auxiliar + self.datos
         self.indice_inicio -= longitud
 
+    # Expande la senial hacia la derecha. Se inserta la cantidad de "longitud" elementos
+    # a la derecha. Si es periodica, se expande según el periodo, y si es finita se
+    # insertan 0s
     def expandir_derecha (self, longitud):
         auxiliar = [0] * longitud
         origen = self.obtener_origen()
