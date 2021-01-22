@@ -9,7 +9,7 @@ class SenalDiscreta:
         self.periodica = periodica # Si es periodica -> True.   Si es finita -> False
         # Si es periodica, guardamos el periodo inicial
         if periodica:
-            self.periodo = datos
+            self.periodo = datos.copy()
 
     def es_periodica (self) -> bool:
         if ( self.periodica ):
@@ -54,13 +54,7 @@ class SenalDiscreta:
         diferencia_izquierda = abs(origen_1 - origen_2)
         diferencia_derecha = abs( (longitud_1 - origen_1) - (longuitud_2 - origen_2) )
 
-        #lista_izquierda = [0] * diferencia_izquierda
-        #lista_derecha = [0] * diferencia_derecha
-
         if origen_1 < origen_2:
-            #auxiliar = self.obtener_datos()
-            #auxiliar = lista_izquierda + auxiliar
-            #self.asignar_datos(auxiliar)
             self.expandir_izquierda(diferencia_izquierda)
         else:
             #auxiliar = senial_discreta.obtener_datos()
@@ -69,14 +63,8 @@ class SenalDiscreta:
             senial_discreta.expandir_izquierda(diferencia_izquierda)
 
         if distancia_origen_fin_1 < distancia_origen_fin_2:
-            #auxiliar = self.obtener_datos()
-            #auxiliar = auxiliar + lista_derecha
-            #self.asignar_datos(auxiliar)
             self.expandir_derecha(diferencia_derecha)
         else:
-            #auxiliar = senial_discreta.obtener_datos()
-            #auxiliar = auxiliar + lista_derecha
-            #senial_discreta.asignar_datos(auxiliar)
             senial_discreta.expandir_derecha(diferencia_derecha)
 
     # Expande la senial hacia la izquierda. Se inserta la cantidad de "longitud" elementos
@@ -84,12 +72,17 @@ class SenalDiscreta:
     # insertan 0s
     def expandir_izquierda (self, longitud):
         auxiliar = [0] * longitud
-        origen = self.obtener_origen()
+        indice_inicio = (self.obtener_indice_inicio() % len(self.periodo)) - longitud
+        print(self.periodo)
+        print("Indice inicio: ", indice_inicio)
         if self.periodica:
-            auxiliar = self.datos[0: origen] + self.datos[origen : len(self.datos)]
-            auxiliar.reverse()
+            auxiliar = self.periodo
+            concatenar = []
             for i in range(longitud):
-                self.datos.insert(0, auxiliar[i % len(auxiliar)])
+                concatenar.append(auxiliar[(i + indice_inicio) % len(auxiliar)])
+                #self.datos.insert(0, auxiliar[i % len(auxiliar)])
+            print(concatenar)
+            self.datos = concatenar + self.datos
         else:
             self.datos = auxiliar + self.datos
         self.indice_inicio -= longitud
@@ -99,11 +92,11 @@ class SenalDiscreta:
     # insertan 0s
     def expandir_derecha (self, longitud):
         auxiliar = [0] * longitud
-        origen = self.obtener_origen()
+        indice_inicio = len(self.datos) % len(self.periodo)
         if self.periodica:
-            auxiliar = self.datos[0: origen] + self.datos[origen : len(self.datos)]
+            auxiliar = self.periodo
             for i in range(longitud):
-                self.datos.append(auxiliar[i % len(auxiliar)])
+                self.datos.append(auxiliar[(i + indice_inicio) % len(auxiliar)])
         else:
             self.datos = self.datos + auxiliar
 
