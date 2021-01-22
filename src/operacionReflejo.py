@@ -11,6 +11,22 @@ def obtener_reflejo(senal, tipoReflejo):
         inicioAux = - len(datosAux) + 1 - senal.obtener_indice_inicio()
         return SenalDiscreta(datosAux, inicioAux, senal.es_periodica())
 
+def obtener_reflejoX(senal):
+
+    datosAux = senal.obtener_datos()
+    for i in range(len(datosAux)):
+        datosAux[i] = datosAux[i] * -1 #Voltea la secuencia de valores
+    return SenalDiscreta(datosAux, senal.obtener_indice_inicio(), senal.es_periodica())
+
+
+def obtener_reflejoY(senal):
+
+    datosAux = senal.obtener_datos()
+    datosAux = senal.obtener_datos()[::-1]
+    inicioAux = - len(datosAux) + 1 - senal.obtener_indice_inicio()
+    return SenalDiscreta(datosAux, inicioAux, senal.es_periodica())
+
+
 #CODIGO DE PRUEBA:
 # senal1 = SenalDiscreta([1, 2, 3, 4], -2, False)
 # print("Senal original:")
