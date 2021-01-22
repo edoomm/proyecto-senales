@@ -72,17 +72,11 @@ class SenalDiscreta:
     # insertan 0s
     def expandir_izquierda (self, longitud):
         auxiliar = [0] * longitud
-        indice_inicio = (self.obtener_indice_inicio() % len(self.periodo)) - longitud
-        print(self.periodo)
-        print("Indice inicio: ", indice_inicio)
         if self.periodica:
-            auxiliar = self.periodo
-            concatenar = []
+            auxiliar = self.periodo.copy()
+            auxiliar.reverse()
             for i in range(longitud):
-                concatenar.append(auxiliar[(i + indice_inicio) % len(auxiliar)])
-                #self.datos.insert(0, auxiliar[i % len(auxiliar)])
-            print(concatenar)
-            self.datos = concatenar + self.datos
+                self.datos.insert(0, auxiliar[i % len(auxiliar)])
         else:
             self.datos = auxiliar + self.datos
         self.indice_inicio -= longitud
@@ -102,3 +96,15 @@ class SenalDiscreta:
 
     def __str__(self):
         return str(self.datos) + " inicio: " + str(self.indice_inicio) + " periodica: " + str(self.periodica)
+
+
+x = SenalDiscreta([1,2,3],-2,True)
+print(x)
+x.expandir_izquierda(3)
+print(x)
+x.expandir_izquierda(2)
+print(x)
+x.expandir_izquierda(2)
+print(x)
+x.expandir_izquierda(2)
+print(x)
