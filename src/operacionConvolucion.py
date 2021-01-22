@@ -110,10 +110,8 @@ def obtener_convolucion_circular (x, h):
 
     return SenalDiscreta(convolucion, (nuevo_indice_inicio % T) * -1, True)
 
-a = SenalDiscreta([-1,2,7], -1, True)
-b = SenalDiscreta([-1,1], 0, True)
-
-y = convolucionar(a, b)
-
-
-print(y)
+# Codigo de prueba
+# a = SenalDiscreta([-1,2,7], -1, True)
+# b = SenalDiscreta([-1,1], 0, True)
+# y = convolucionar(a, b)
+# print(y)
