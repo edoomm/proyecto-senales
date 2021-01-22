@@ -1,4 +1,4 @@
-def obtenersuma(x, h):
+def obtenerSuma(x, h):
     y = []
     # solo funciona para listas del mismo tamaño
     if len(x) != len(h):
