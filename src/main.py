@@ -460,8 +460,6 @@ def diezmar():
     # Se configura la GUI
     configurarPantallaDeUnSoloValor(operacion, xn.obtener_datos(), gn.obtener_datos())
     # Grafica
-    print(xn)
-    print(gn)
     gn.empatar(xn)
     graficarSolo2(range(gn.obtener_longitud()), xn.obtener_datos(), gn.obtener_datos(), operacion)
     ventana.mainloop()
@@ -470,6 +468,7 @@ def interpolar():
     """
     Comando asociado al botón "Interpolar"
     """
+    #Obtiene datos de la GUI
     seniales = concatenarSecuenciaX()
     xn = seniales[0]
     operacion = "Interpolación"
