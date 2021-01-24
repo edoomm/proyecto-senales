@@ -86,8 +86,8 @@ class SenalDiscreta:
     # insertan 0s
     def expandir_derecha (self, longitud):
         auxiliar = [0] * longitud
-        indice_inicio = len(self.datos) % len(self.periodo)
         if self.periodica:
+            indice_inicio = len(self.datos) % len(self.periodo)
             auxiliar = self.periodo
             for i in range(longitud):
                 self.datos.append(auxiliar[(i + indice_inicio) % len(auxiliar)])
