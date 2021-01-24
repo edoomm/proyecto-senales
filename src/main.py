@@ -12,6 +12,7 @@ from operacionResta import *
 from operacionReflejo import *
 from operacionConvolucion import *
 from operacionAmplificacionAtenuacion import *
+from operacionInterpolacionDiezmacion import *
 
 ventana = Tk()
 
@@ -23,6 +24,7 @@ xO = StringVar()
 xR = StringVar()
 
 multiplicador = StringVar()
+factorInterpolacionDiezmacion = StringVar()
 
 hL = StringVar()
 hO = StringVar()
@@ -159,7 +161,6 @@ def introducirValores():
            bd=8, background="#ffb3cc", height=1, command=reflejarEnXyY,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*3+yPosicion)
 
-
   #  Entry(ventana, textvariable=opcionreflejo, width=1, font=("Arial",20)).place(x=xPosicion+115, y=espacio*3+yPosicion+10)
    # Label(ventana, text="Opción (0: Reflejo en x; 1: Reflejo en y)", font=("Arial", 15)).place(x=xPosicion+145, y=espacio*3+yPosicion+10)
 
@@ -167,9 +168,19 @@ def introducirValores():
            bd=8, background="#ffb3cc", height=1, command=desplazar,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*4+yPosicion)
 
-    Button(ventana, text="Diezmación/Interpolación", cursor="hand2",
+    Entry(ventana,justify=CENTER, textvariable=factorInterpolacionDiezmacion, width=4,
+          font=("Arial", 16)).place(x=405, y=448)
+
+    Label(ventana, text="Factor de diezmación/interpolación",
+          font=("Arial", 10)).place(x=400, y=425)
+
+    Button(ventana, text="Diezmación", cursor="hand2",
            bd=8, background="#ffb3cc", height=1, command=diezmar,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*5+yPosicion)
+
+    Button(ventana, text="Interpolación", cursor="hand2",
+           bd=8, background="#ffb3cc", height=1, command=interpolar,
+           font=("Arial", 16)).place(x=xPosicion+145, y=espacio*5+yPosicion)
 
     Button(ventana, text="Convolución", cursor="hand2",
            bd=8, background="#ffb3cc", height=1, command=convolusionar,
@@ -439,37 +450,37 @@ def diezmar():
     Comando asociado al botón "Diezmación"
     """
     # Obtiene datos de GUI
-    senales = emparejarValores()
+    senales = concatenarSecuenciaX()
     xn = senales[0]
-    hn = senales[1]
+    operacion = "Diezmación"
+    if(xn.obtener_indice_inicio() > 0):
+        xn.asignar_indice_inicio(-xn.obtener_indice_inicio())
     # Se realiza la operación
-    gn = obtenerSuma(xn, hn) # ------------------LINEA A CAMBIAR
-
-    operacion = "Suma" # ------------------------LINEA A CAMBIAR
+    gn = obtenerDiezmacion(xn, int(factorInterpolacionDiezmacion.get()))
     # Se configura la GUI
-    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
+    configurarPantallaDeUnSoloValor(operacion, xn.obtener_datos(), gn.obtener_datos())
     # Grafica
-    graficar(puntosEjeH, xn.obtener_datos(), hn.obtener_datos(), gn.obtener_datos(), operacion)
-
+    gn.empatar(xn)
+    graficarSolo2(range(gn.obtener_longitud()), xn.obtener_datos(), gn.obtener_datos(), operacion)
     ventana.mainloop()
 
 def interpolar():
     """
     Comando asociado al botón "Interpolar"
     """
-    # Obtiene datos de GUI
-    senales = emparejarValores()
-    xn = senales[0]
-    hn = senales[1]
+    #Obtiene datos de la GUI
+    seniales = concatenarSecuenciaX()
+    xn = seniales[0]
+    operacion = "Interpolación"
+    if(xn.obtener_indice_inicio() > 0):
+        xn.asignar_indice_inicio(-xn.obtener_indice_inicio())
     # Se realiza la operación
-    gn = obtenerSuma(xn, hn) # ------------------LINEA A CAMBIAR
-
-    operacion = "Suma" # ------------------------LINEA A CAMBIAR
+    gn = obtenerInterpolacion(xn, int(factorInterpolacionDiezmacion.get()))
     # Se configura la GUI
-    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
+    configurarPantallaDeUnSoloValor(operacion, xn.obtener_datos(), gn.obtener_datos())
     # Grafica
-    graficar(puntosEjeH, xn.obtener_datos(), hn.obtener_datos(), gn.obtener_datos(), operacion)
-
+    gn.empatar(xn)
+    graficarSolo2(range(gn.obtener_longitud()), xn.obtener_datos(), gn.obtener_datos(), operacion)
     ventana.mainloop()
 
 # La falta de ortografia es adrede, porque ya existe la función sin falta de ortografia jaja
