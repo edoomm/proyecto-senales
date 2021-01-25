@@ -202,7 +202,18 @@ def tests():
     """
     Función para hacer pruebas solamente
     """
-    print(xesperiodica.get())
+    senales = emparejarValores()
+    xn = senales[0]
+    hn = senales[1]
+    gn = convolucionar(xn, hn)
+
+    xn.empatar(gn)
+    hn.empatar(gn)
+
+    print("x(n):", xn)
+    print("h(n):", hn)
+    print("g(n):", gn)
+    print("pts:", puntosEjeH)
 
 def configurarPantalla(operacion, resx, resh, resg):
     """
@@ -599,16 +610,16 @@ def emparejarValores():
     for i in range(len(newH)-len(puntosEjeH)):
         puntosEjeH.append(i+1)
 
-    # Cálculo del centro de las listas
-    icentro = 0
+    # Cálculo del indice de inicio de las listas
+    iinicio = 0
     if len(xLAux) != 0 and len(hLAux) != 0:
         if len(xLAux) > len (hLAux):
-            icentro = len(xLAux)
+            iinicio = -len(xLAux)
         else:
-            icentro = len(hLAux) 
+            iinicio = -len(hLAux) 
 
-    xn = SenalDiscreta(newX, icentro, xesperiodica.get())
-    hn = SenalDiscreta(newH, icentro, hesperiodica.get())
+    xn = SenalDiscreta(newX, iinicio, xesperiodica.get())
+    hn = SenalDiscreta(newH, iinicio, hesperiodica.get())
     return [xn, hn]
 
 
