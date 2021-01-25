@@ -5,6 +5,7 @@ import numpy as np
 
 # Archivos de uso común
 from senalDiscreta import *
+from manejadorDeSenales import *
 
 # Archivos que contienen las operaciones ----------------------------- AGREGAR AQUI SUS ARCHIVOS CORRESPONDIENTES A SUS OPERACIONES
 from operacionSuma import *
@@ -40,6 +41,9 @@ hesperiodica = BooleanVar()
 
 # Varibles para operaciones particulares
 opcionreflejo = IntVar() # Opción para decidir en que eje se reflejara
+
+# Variables para mensajes
+estadoGrabacion = StringVar()
 
 # Con el siguiente algoritmo lo que se hace
 # es hacer tanto x(n) como h(n) tengan la
@@ -220,6 +224,17 @@ def introducirValoresAudio():
            bd=10, background="#ff9aa2", height=0, command=verInicio,
            font=("Arial", 15)).place(x=2, y=5)
 
+    Button(ventana, text="Grabar", command=grabarGUI, font=("Arial", 15)).place(x=100, y=15)
+
+    Label(ventana, textvariable=estadoGrabacion,
+          font=("Arial", 10)).place(x=200, y=20)
+
+    estadoGrabacion.set("Sin grabar")
+
+    Button(ventana, text="Escuchar entrada", command=tests, font=("Arial", 15)).place(x=100, y=75)
+
+    Button(ventana, text="Escuchar salida", command=tests, font=("Arial", 15)).place(x=100+200, y=75)
+
     Button(ventana, text="Amplificación / Atenuación", cursor="hand2",
            bd=8, background="#ffb3cc", height=1, command=amplificarAtenuar,
            font=("Arial", 16)).place(x=xPosicion, y=espacio * 2 + yPosicion)
@@ -270,7 +285,10 @@ def tests():
     """
     Función para hacer pruebas solamente
     """
-    print(udsDesplazamiento.get())
+
+    estadoGrabacion.set("Grabando...")
+    senal = obtenerSenalDiscretaDesdeAudio()
+    estadoGrabacion.set("Audio grabado")
 
 def emparejarPuntosEjeHConInicio(senal):
     """
@@ -837,6 +855,14 @@ def graficarSolo2(puntosEjeH,newX,resultado,operacion):
     pyplot.axhline(0, color="black")
     pyplot.axvline(0, color="black")
     plt.show()
+
+def grabarGUI():
+    """
+    Graba el audio en la GUI
+    """
+    estadoGrabacion.set("Grabando...")
+    senal = obtenerSenalDiscretaDesdeAudio()
+    estadoGrabacion.set("Audio grabado")
 
 crearVentana()
 verInicio()
