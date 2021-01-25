@@ -97,14 +97,14 @@ class SenalDiscreta:
     def __str__(self):
         return str(self.datos) + " inicio: " + str(self.indice_inicio) + " periodica: " + str(self.periodica)
 
-
-x = SenalDiscreta([1,2,3],-2,True)
-print(x)
-x.expandir_izquierda(3)
-print(x)
-x.expandir_izquierda(2)
-print(x)
-x.expandir_izquierda(2)
-print(x)
-x.expandir_izquierda(2)
-print(x)
+# CODIGO DE PRUEBA:
+# x = SenalDiscreta([1,2,3],-2,True)
+# print(x)
+# x.expandir_izquierda(3)
+# print(x)
+# x.expandir_izquierda(2)
+# print(x)
+# x.expandir_izquierda(2)
+# print(x)
+# x.expandir_izquierda(2)
+# print(x)
