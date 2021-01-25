@@ -23,8 +23,10 @@ xL = StringVar()
 xO = StringVar()
 xR = StringVar()
 
+# Opciones
 multiplicador = StringVar()
 factorInterpolacionDiezmacion = StringVar()
+udsDesplazamiento = IntVar()
 
 hL = StringVar()
 hO = StringVar()
@@ -161,12 +163,15 @@ def introducirValores():
            bd=8, background="#ffb3cc", height=1, command=reflejarEnXyY,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*3+yPosicion)
 
-  #  Entry(ventana, textvariable=opcionreflejo, width=1, font=("Arial",20)).place(x=xPosicion+115, y=espacio*3+yPosicion+10)
-   # Label(ventana, text="Opción (0: Reflejo en x; 1: Reflejo en y)", font=("Arial", 15)).place(x=xPosicion+145, y=espacio*3+yPosicion+10)
-
     Button(ventana, text="Desplazamiento", cursor="hand2",
            bd=8, background="#ffb3cc", height=1, command=desplazar,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*4+yPosicion)
+
+    Entry(ventana,justify=CENTER, textvariable=udsDesplazamiento, width=4,
+          font=("Arial", 16)).place(x=285, y=323+53)
+
+    Label(ventana, text="Unidades a desplazar",
+          font=("Arial", 10)).place(x=285+5, y=300+53)
 
     Entry(ventana,justify=CENTER, textvariable=factorInterpolacionDiezmacion, width=4,
           font=("Arial", 16)).place(x=405, y=448)
@@ -202,20 +207,7 @@ def tests():
     """
     Función para hacer pruebas solamente
     """
-    senales = emparejarValores()
-    xn = senales[0]
-    hn = senales[1]
-    gn = convolucionar(xn, hn)
-
-    xn.empatar(gn)
-    hn.empatar(gn)
-    emparejarPuntosEjeHConInicio(gn)
-
-    print("x(n):", xn)
-    print("h(n):", hn)
-    print("g(n):", gn)
-
-    print("pts:", puntosEjeH)
+    print(udsDesplazamiento.get())
 
 def emparejarPuntosEjeHConInicio(senal):
     """
