@@ -13,6 +13,7 @@ from operacionReflejo import *
 from operacionConvolucion import *
 from operacionAmplificacionAtenuacion import *
 from operacionInterpolacionDiezmacion import *
+from operacionDesplazamiento import *
 
 ventana = Tk()
 
@@ -391,28 +392,8 @@ def amplificarAtenuar():
     graficarSolo2(puntosEjeH, newX, gn, operacion)
     ventana.mainloop()
 
-def reflejar():
-    """
-    Comando asociado al botón "reflejar"
-    """
-    # Obtiene datos de GUI
-    senales = emparejarValores()
-    xn = senales[0]
-    hn = senales[1]
-    # Se realiza la operación
-    gn = obtener_reflejo(xn, 1) # ------------------LINEA A CAMBIAR
-
-    operacion = "Reflejar" # ------------------------LINEA A CAMBIAR
-    # Se configura la GUI
-    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
-    # Grafica
-    graficar(puntosEjeH, xn.obtener_datos(), hn.obtener_datos(), gn.obtener_datos(), operacion)
-
-    ventana.mainloop()
-
 """
 Hice otra función para reflejar al mismo tiempo en X e Y, .
-la funcion anterior daba algunos errores y esta trata de corregirlos
 """
 def reflejarEnXyY():
     """
@@ -448,17 +429,18 @@ def desplazar():
     Comando asociado al botón "Desplazar"
     """
     # Obtiene datos de GUI
-    senales = emparejarValores()
+    senales = concatenarSecuenciaX()
     xn = senales[0]
-    hn = senales[1]
+    td = udsDesplazamiento.get()
     # Se realiza la operación
-    gn = obtenerSuma(xn, hn) # ------------------LINEA A CAMBIAR
+    gn1 = obtener_Desplazamiento(xn, 1, td) # Desplazamiento a la derecha
+    gn2 = obtener_Desplazamiento(xn, 2, td) # Desplazamiento a la izquierda
 
-    operacion = "Suma" # ------------------------LINEA A CAMBIAR
+    operacion = "Desplazamiento" # ------------------------LINEA A CAMBIAR
     # Se configura la GUI
-    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
+    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("gn1", gn1), obtenerSecuencia("gn2", gn2))
     # Grafica
-    graficar(puntosEjeH, xn.obtener_datos(), hn.obtener_datos(), gn.obtener_datos(), operacion)
+    graficar(puntosEjeH, xn.obtener_datos(), gn1.obtener_datos(), gn2.obtener_datos(), operacion)
 
     ventana.mainloop()
 
