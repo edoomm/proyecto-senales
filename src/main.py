@@ -93,7 +93,7 @@ def verInicio():
     #en donde dice command te debe de dirigir a una pantalla
     #en la cual se puede grabar un audio
     Button(ventana, text="    Señal de audio    ", cursor="hand2",
-           bd=10, background="#b5ead7", height=0, command=introducirValores,
+           bd=10, background="#b5ead7", height=0, command=introducirValoresAudio,
            font=("Arial", 19)).place(x=360, y=70)
 
     ventana.mainloop()
@@ -201,6 +201,68 @@ def introducirValores():
     #Checkboxes
     Checkbutton(ventana, text="Periodica", variable=xesperiodica).place(x=615, y=25)
     Checkbutton(ventana, text="Periodica", variable=hesperiodica).place(x=615, y=85)
+
+    ventana.mainloop()
+
+def introducirValoresAudio():
+    """
+    Función para la GUI\n
+    Configura la pantalla para que se pueda trabajar con audio
+    """
+    xPosicion = 100
+    yPosicion = 100
+    espacio = 65
+
+    imagenFondo = PhotoImage(file="imgs/fondo.pgm")
+    Label(ventana, image=imagenFondo).place(x=0, y=0)
+
+    Button(ventana, text="↶", cursor="hand2",
+           bd=10, background="#ff9aa2", height=0, command=verInicio,
+           font=("Arial", 15)).place(x=2, y=5)
+
+    Button(ventana, text="Amplificación / Atenuación", cursor="hand2",
+           bd=8, background="#ffb3cc", height=1, command=amplificarAtenuar,
+           font=("Arial", 16)).place(x=xPosicion, y=espacio * 2 + yPosicion)
+
+    Entry(ventana,justify=CENTER, textvariable=multiplicador, width=4,
+          font=("Arial", 16)).place(x=385, y=248)
+
+    Label(ventana, text="Multiplicador",
+          font=("Arial", 10)).place(x=380, y=225)
+
+    Button(ventana, text="Reflejo en X y Y", cursor="hand2",
+           bd=8, background="#ffb3cc", height=1, command=reflejarEnXyY,
+           font=("Arial", 16)).place(x=xPosicion, y=espacio*3+yPosicion)
+
+    Button(ventana, text="Desplazamiento", cursor="hand2",
+           bd=8, background="#ffb3cc", height=1, command=desplazar,
+           font=("Arial", 16)).place(x=xPosicion, y=espacio*4+yPosicion)
+
+    Entry(ventana,justify=CENTER, textvariable=udsDesplazamiento, width=4,
+          font=("Arial", 16)).place(x=285, y=323+53)
+
+    Label(ventana, text="Unidades a desplazar",
+          font=("Arial", 10)).place(x=285+5, y=300+53)
+
+    Entry(ventana,justify=CENTER, textvariable=factorInterpolacionDiezmacion, width=4,
+          font=("Arial", 16)).place(x=405, y=448)
+
+    Label(ventana, text="Factor de diezmación/interpolación",
+          font=("Arial", 10)).place(x=400, y=425)
+
+    Button(ventana, text="Diezmación", cursor="hand2",
+           bd=8, background="#ffb3cc", height=1, command=diezmar,
+           font=("Arial", 16)).place(x=xPosicion, y=espacio*5+yPosicion)
+
+    Button(ventana, text="Interpolación", cursor="hand2",
+           bd=8, background="#ffb3cc", height=1, command=interpolar,
+           font=("Arial", 16)).place(x=xPosicion+145, y=espacio*5+yPosicion)
+
+    Button(ventana, text="FFT", cursor="hand2",
+           bd=8, background="#ffb3cc", height=1, command=fft,
+           font=("Arial", 16)).place(x=xPosicion, y=espacio*7+yPosicion)
+
+    Button(ventana, text="Pruebas", command=tests).place(x=xPosicion+15, y=espacio*8+yPosicion)
 
     ventana.mainloop()
 
@@ -436,6 +498,16 @@ def desplazar():
     gn1 = obtener_Desplazamiento(xn, 1, td) # Desplazamiento a la derecha
     gn2 = obtener_Desplazamiento(xn, 2, td) # Desplazamiento a la izquierda
 
+    # Emparejando
+    xn.empatar(gn1)
+    emparejarPuntosEjeHConInicio(xn)
+
+    print("xn:", xn)
+    print("gn1:", gn1)
+    print("gn2:", gn2)
+    print("pts:", puntosEjeH)
+
+
     operacion = "Desplazamiento" # ------------------------LINEA A CAMBIAR
     # Se configura la GUI
     configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("gn1", gn1), obtenerSecuencia("gn2", gn2))
@@ -670,7 +742,7 @@ def concatenarSecuenciaX():
     for i in range(len(newX)-len(puntosEjeH)):
         puntosEjeH.append(i+1)
 
-    xn = SenalDiscreta(newX, len(xLAux), xesperiodica.get())
+    xn = SenalDiscreta(newX, -len(xLAux), xesperiodica.get())
 
     return [xn]
 
