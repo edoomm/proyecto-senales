@@ -209,11 +209,25 @@ def tests():
 
     xn.empatar(gn)
     hn.empatar(gn)
+    emparejarPuntosEjeHConInicio(gn)
 
     print("x(n):", xn)
     print("h(n):", hn)
     print("g(n):", gn)
+
     print("pts:", puntosEjeH)
+
+def emparejarPuntosEjeHConInicio(senal):
+    """
+    Empareja los puntos del eje H para graficar con los respectivos de la señal dada
+    Parameters:
+        senal (SenalDiscreta): La señal resultante de alguna operación de preferencia
+    """
+    global puntosEjeH
+
+    puntosEjeH = []
+    for i in range(senal.obtener_indice_inicio(), senal.obtener_longitud() + senal.obtener_indice_inicio()):
+        puntosEjeH.append(i)
 
 def configurarPantalla(operacion, resx, resh, resg):
     """
@@ -505,6 +519,11 @@ def convolusionar():
     hn = senales[1]
     # Se realiza la operación
     gn = convolucionar(xn, hn) # ------------------LINEA A CAMBIAR
+
+    # Se realiza emparejamiento
+    xn.empatar(gn)
+    hn.empatar(gn)
+    emparejarPuntosEjeHConInicio(gn)
 
     operacion = "Convolución" # ------------------------LINEA A CAMBIAR
     # Se configura la GUI
