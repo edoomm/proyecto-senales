@@ -10,6 +10,7 @@ class SenalDiscreta:
         # Si es periodica, guardamos el periodo inicial
         if periodica:
             self.periodo = datos.copy()
+            self.indice_inicio_periodo = indice_inicio
 
     def es_periodica (self) -> bool:
         if ( self.periodica ):
@@ -70,14 +71,20 @@ class SenalDiscreta:
     # Expande la senial hacia la izquierda. Se inserta la cantidad de "longitud" elementos
     # a la izquierda. Si es periodica, se expande según el periodo, y si es finita se
     # insertan 0s
+    # [1,.2,3]
+    # [2,3,1,.2,3,1] -> [1,2,3,1,.2,3,1,2,3]
     def expandir_izquierda(self, longitud):
         auxiliar = [0] * longitud
         if self.periodica:
-            indice = self.indice_inicio - 1
-            N = len(self.periodo)  # Periodo de la senial periodica
-            for i in range(longitud):
-                dato_a_insertar = self.periodo[(indice - i) % N]
-                self.datos.insert(0, dato_a_insertar)
+            i = self.obtener_origen()
+            j = self.indice_inicio_periodo * -1
+            for k in range(self.obtener_origen(), 0, -1):
+                i -= 1
+                j -= 1
+            j -= 1
+            for k in range(longitud):
+                valor = self.periodo[(j - k) % len(self.periodo)]
+                self.datos.insert(0, valor)
         else:
             self.datos = auxiliar + self.datos
         self.indice_inicio -= longitud
@@ -88,10 +95,13 @@ class SenalDiscreta:
     def expandir_derecha (self, longitud):
         auxiliar = [0] * longitud
         if self.periodica:
-            indice_inicio = len(self.datos) % len(self.periodo)
-            auxiliar = self.periodo
+            auxiliar = []
+            desfase = len(self.datos) - self.obtener_origen() - 1
+            indice = desfase + abs(self.indice_inicio_periodo) + 1
+            N = len(self.periodo)
             for i in range(longitud):
-                self.datos.append(auxiliar[(i + indice_inicio) % len(auxiliar)])
+                auxiliar.append(self.periodo[(indice + i) % N])
+            self.datos = self.datos + auxiliar
         else:
             self.datos = self.datos + auxiliar
 
@@ -121,11 +131,14 @@ class SenalDiscreta:
 
 
 
+y = SenalDiscreta([1,2,3,4,5,6,7,8,9],-3,True)
+print(y)
+y.expandir_izquierda(2)
+print(y)
+y.expandir_izquierda(2)
+print(y)
 
-#x = SenalDiscreta([1,2,3],-2,True)
-#y = SenalDiscreta([1,2],0,True)
-#print(y)
-#y.expandir_periodo_izquierda(1)
-#print(y)
-#y.expandir_periodo_derecha(1)
-#print(y)
+y.expandir_derecha(2)
+print(y)
+y.expandir_derecha(2)
+print(y)
