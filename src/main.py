@@ -251,7 +251,7 @@ def introducirValoresAudio():
            font=("Arial", 16)).place(x=xPosicion, y=espacio*3+yPosicion)
 
     Button(ventana, text="Desplazamiento", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=desplazar,
+           bd=8, background="#ffb3cc", height=1, command=desplazamientoAudio,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*4+yPosicion)
 
     Entry(ventana,justify=CENTER, textvariable=udsDesplazamiento, width=4,
@@ -283,7 +283,7 @@ def introducirValoresAudio():
     ventana.mainloop()
 
 def tests():
-    print("test")
+    print("")
 
 def emparejarPuntosEjeHConInicio(senal):
     """
@@ -623,6 +623,9 @@ def interpolarAudio():
     ventana.mainloop()
     obtenerAudioDesdeSenalDiscreta(gn)
 
+def desplazamientoAudio():
+    DesplazarCompleto(udsDesplazamiento.get()*44100)
+
 # La falta de ortografia es adrede, porque ya existe la función sin falta de ortografia jaja
 def convolusionar():
     """
@@ -668,7 +671,6 @@ def fft():
     ventana.mainloop()
 
 # TODO: Validar valores de las entradas
-# TODO: Cambiar lógica para señales periodicas y no periodicas
 def emparejarValores():
     
     '''Hace las listas correspondientes a x(n) y h(n) del mismo tamaño y las asigna newX y newH así como prepara los puntos en el eje horizontal de las gráficas para su posterior ploteo
@@ -749,12 +751,10 @@ def emparejarValores():
         if xLAux[0] != '':
             indice_x = -len(xLAux)
     indice_h = 0
-    if len(xRAux) > 0:
-        if xRAux[0] != '':
+    if len(hLAux) > 0:
+        if hLAux[0] != '':
             indice_h = -len(hLAux)
 
-    print(xls)
-    print(xrs)
     xn = SenalDiscreta(xls + [float(xO.get())] + xrs, indice_x, xesperiodica.get())
     hn = SenalDiscreta(hls + [float(hO.get())] + hrs, indice_h, hesperiodica.get())
     
