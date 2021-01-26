@@ -238,7 +238,7 @@ def introducirValoresAudio():
     Button(ventana, text="Escuchar salida", command=tests, font=("Arial", 15)).place(x=100+200, y=75)
 
     Button(ventana, text="Amplificación / Atenuación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=amplificarAtenuar,
+           bd=8, background="#ffb3cc", height=1, command=amplificarAtenuarAudio,
            font=("Arial", 16)).place(x=xPosicion, y=espacio * 2 + yPosicion)
 
     Entry(ventana,justify=CENTER, textvariable=multiplicador, width=4,
@@ -496,6 +496,19 @@ def amplificarAtenuar():
     graficarSolo2(puntosEjeH, newX, gn, operacion)
     ventana.mainloop()
 
+def amplificarAtenuarAudio():
+    # Se realiza la operación
+    gn = obtenerAmplificacionAtenuacion(senal.obtener_datos().copy(), float(multiplicador.get()))
+
+    if float(multiplicador.get())>1:
+        operacion = "Amplificacion"
+    else:
+        operacion = "Atenuacion"
+    obtenerAudioDesdeSenalDiscreta(SenalDiscreta(gn, 0, False))
+    # Grafica
+    graficarInterpolacionDiezmacion(senal.obtener_datos(), gn, operacion)
+    ventana.mainloop()
+
 """
 Hice otra función para reflejar al mismo tiempo en X e Y, .
 """
@@ -579,7 +592,7 @@ def diezmarAudio():
     gn.asignar_indice_inicio(0)
     gn.empatar(xn)
     obtenerAudioDesdeSenalDiscreta(gn)
-    graficarInterpolacionDiezmacion(xn.obtener_datos(), gn.obtener_datos(), operacion, factor)
+    graficarInterpolacionDiezmacion(xn.obtener_datos(), gn.obtener_datos(), operacion)
     ventana.mainloop()
 
 def interpolarAudio():
@@ -594,7 +607,7 @@ def interpolarAudio():
     # Grafica
     gn.empatar(xn)
     obtenerAudioDesdeSenalDiscreta(gn)
-    graficarInterpolacionDiezmacion(xn.obtener_datos(), gn.obtener_datos(), operacion, factor)
+    graficarInterpolacionDiezmacion(xn.obtener_datos(), gn.obtener_datos(), operacion)
     ventana.mainloop()
 
 def desplazamientoAudio():

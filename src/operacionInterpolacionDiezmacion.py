@@ -53,7 +53,7 @@ def obtenerDiezmacion(xn,factor):
             index += 1
     return SenalDiscreta(x, -origen, xn.es_periodica())
 
-def graficarInterpolacionDiezmacion(newX,resultado,operacion,factor):
+def graficarInterpolacionDiezmacion(newX,resultado,operacion):
     """
     Función que imprime dos formas de onda
     """
