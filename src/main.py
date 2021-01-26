@@ -53,6 +53,7 @@ estadoGrabacion = StringVar()
 # segun sea el caso
 newH = [] # Lista para h(n) de longitud estandar
 newX = [] # Lista para x(n) de longitud estandar
+newX2 = []
 puntosEjeH = [] # Lista que contiene los puntos en donde se graficaran las listas en el eje horizontal
 
 def crearVentana():
@@ -817,6 +818,103 @@ def concatenarSecuenciaX():
     xn = SenalDiscreta(newX, -len(xLAux), xesperiodica.get())
 
     return [xn]
+
+
+def desplazar():
+    global newX,newX2,puntosEjeH
+
+    obtenerDesplazamiento()
+
+    # Se realiza la operación
+    operacion = "Desplazar"
+    # Se configura la GUI
+    configurarPantallaDeUnSoloValor(operacion, newX2,newX)
+    # Grafica
+    graficarSoloUna(puntosEjeH, newX, operacion)
+    ventana.mainloop()
+
+
+def obtenerDesplazamiento():
+    global puntosEjeH,newX,newX2
+    #la funcion split sirve para separar
+    #la cadena cada vez que hay un
+    #determinado caracter, aqui en es las ","
+    xLAux = xL.get().split(",")
+    xRAux = xR.get().split(",")
+
+    newX2 = []
+
+    for elemento in xLAux:
+        if elemento != "":
+            newX2.append(float(elemento))
+        else:
+            newX2.append(float(0))
+    newX2.append(float(xO.get()))
+
+    for elemento in xRAux:
+        if elemento != "":
+            newX2.append(float(elemento))
+        else:
+            newX2.append(float(0))
+
+    if udsDesplazamiento.get()<0:
+        xLAux.reverse()
+        for i in range(udsDesplazamiento.get()):
+            xLAux.append(float(0))
+        xLAux.reverse()
+    else:
+        for i in range(udsDesplazamiento.get()):
+            xRAux.append(float(0))        
+
+    # Se resetea newX, newH y puntosEjeH
+    newX = []
+    puntosEjeH = []
+
+    #int(udsDesplazamiento.get())
+
+    for elemento in xLAux:
+        if elemento != "":
+            newX.append(float(elemento))
+        else:
+            newX.append(float(0))
+    newX.append(float(xO.get()))
+    #Para guardar el origen se cuenta desde
+    #el, y se cuentan la cantidad de elementos
+    #a la izquierda etiquetandolos como se
+    #encontrarian en la grafica
+    for i in range(len(newX)+udsDesplazamiento.get()):
+        puntosEjeH.append(i*(-1))
+
+    #el arreglo se invierte debido a que en el
+    #arreglo tenemos 0,-1,-2 por ejemplo, y se
+    #debe de invertir para que quede como en una
+    #grafica normal
+    puntosEjeH.reverse()
+
+    for elemento in xRAux:
+        if elemento != "":
+            newX.append(float(elemento))
+        else:
+            newX.append(float(0))
+
+    if udsDesplazamiento.get()<0:
+        newX.reverse()
+        for i in range((udsDesplazamiento.get()*(-1))-2):
+            newX.append(float(0))
+        newX.reverse()
+    
+    for i in range(len(newX)-len(puntosEjeH)):
+        puntosEjeH.append(i+1)
+
+
+def graficarSoloUna(puntosEjeH,resultado,operacion):
+    plt.suptitle(operacion+' x(n)')
+    markerline, stemlines, baseline = plt.stem(puntosEjeH, resultado, '-.')
+    pyplot.axhline(0, color="black")
+    pyplot.axvline(0, color="black")
+    plt.ylabel('x(n)')
+    plt.show()
+
 
 def graficar(puntosEjeH,newX,newH, resultado,operacion):
     #puntosEjeH se refiere al eje vertical
