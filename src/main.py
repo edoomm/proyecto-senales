@@ -35,6 +35,10 @@ hL = StringVar()
 hO = StringVar()
 hR = StringVar()
 
+xentrytext = StringVar()
+hentrytext = StringVar()
+gentrytext = StringVar()
+
 # Variables para las periocidades
 
 xesperiodica = BooleanVar()
@@ -327,14 +331,17 @@ def configurarPantalla(operacion, resx, resh, resg):
     Label(ventana, text=operacion,
           font=("Arial", 45)).place(x=270, y=50)
 
-    Label(ventana, text=resx,
+    Entry(ventana, textvariable=xentrytext, width=33,
           font=("Arial", 25)).place(x=50, y=150)
+    xentrytext.set(resx)
 
-    Label(ventana, text=resh,
+    Entry(ventana, textvariable=hentrytext, width=33,
           font=("Arial", 25)).place(x=50, y=220)
+    hentrytext.set(resh)
 
-    Label(ventana, text=resg,
+    Entry(ventana, textvariable=gentrytext, width=33,
           font=("Arial", 25)).place(x=50, y=290)
+    gentrytext.set(resg)
 
 """
 Para las operaciones que solo tienen una secuencia de entrada
@@ -365,7 +372,7 @@ def configurarPantallaDeUnSoloValor(operacion, xn, gn):
 
     #Se imprimen los arreglos emparejados
     #y el resultado
-    resx = "x(n){"
+    resx = "x(n)={"
     for e in xn:
         if e != "":
             resx = resx + str(e) + ","
@@ -373,7 +380,7 @@ def configurarPantallaDeUnSoloValor(operacion, xn, gn):
             resx = resx + str(e)
     resx = resx + "}"
 
-    resg = "g(n){"
+    resg = "g(n)={"
     for e in gn:
         if e != "":
             resg = resg+str(e)+","
@@ -387,11 +394,13 @@ def configurarPantallaDeUnSoloValor(operacion, xn, gn):
     Label(ventana, text=operacion,
           font=("Arial", 45)).place(x=240, y=50)
 
-    Label(ventana, text=resx,
+    Entry(ventana, textvariable=xentrytext, width=30,
           font=("Arial", 25)).place(x=50, y=150)
+    xentrytext.set(resx)
 
-    Label(ventana, text=resg,
+    Entry(ventana, textvariable=gentrytext, width=30,
           font=("Arial", 25)).place(x=50, y=290)
+    gentrytext.set(resg)
 
 
 def obtenerSecuencia(variable, senal):

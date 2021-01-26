@@ -19,8 +19,10 @@ def desplazar_unidad(senal, n):
 
 # Función que se llama desde la GUI
 def obtener_desplazamiento (senial, desplazamiento):
-    #indice_actual = senial.obtener_indice_inicio()
-    #nuevo_indice = indice_actual - desplazamiento
+    if not senial.es_periodica() and abs(desplazamiento) >= senial.obtener_longitud():
+        return SenalDiscreta([0 for i in range(senial.obtener_longitud())], senial.obtener_indice_inicio(), senial.es_periodica())
+
+
     if senial.es_periodica():
         desplazamiento*=-1
         datosAux= senial.obtener_datos()[:]
