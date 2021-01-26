@@ -9,6 +9,7 @@ class SenalDiscreta:
         self.periodica = periodica # Si es periodica -> True.   Si es finita -> False
         # Si es periodica, guardamos el periodo inicial
         if periodica:
+            # Lista de datos de un periodo de la senial periodica
             self.periodo = datos.copy()
 
     def es_periodica (self) -> bool:
@@ -73,10 +74,11 @@ class SenalDiscreta:
     def expandir_izquierda (self, longitud):
         auxiliar = [0] * longitud
         if self.periodica:
-            auxiliar = self.periodo.copy()
-            auxiliar.reverse()
+            indice = self.indice_inicio - 1
+            N = len(self.periodo)  # Periodo de la senial periodica
             for i in range(longitud):
-                self.datos.insert(0, auxiliar[i % len(auxiliar)])
+                dato_a_insertar = self.periodo[(indice - i) % N]
+                self.datos.insert(0, dato_a_insertar)
         else:
             self.datos = auxiliar + self.datos
         self.indice_inicio -= longitud
@@ -121,10 +123,10 @@ class SenalDiscreta:
 
 
 
-x = SenalDiscreta([1,2,3],-2,True)
-y = SenalDiscreta([1,2],0,True)
-print(y)
-y.expandir_periodo_izquierda(1)
-print(y)
-y.expandir_periodo_derecha(1)
-print(y)
+#x = SenalDiscreta([1,2,3],-2,True)
+#y = SenalDiscreta([1,2,3,4],0,True)
+#print(y)
+#y.expandir_derecha(2)
+#print(y)
+#y.expandir_izquierda(2)
+#print(y)
