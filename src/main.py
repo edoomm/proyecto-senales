@@ -566,7 +566,7 @@ def diezmarAudio():
     """
     Comando asociado al botón "Diezmar" cuando la GUI está configurada para procesar audio
     """
-    xn = SenalDiscreta(senal.obtener_datos().copy().tolist(), 0, False)
+    xn = SenalDiscreta(senal.obtener_datos().copy(), 0, False)
     operacion = "Diezmación"
     factor = int(factorInterpolacionDiezmacion.get())
     # Se realiza la operación
@@ -574,24 +574,24 @@ def diezmarAudio():
     # Grafica
     gn.asignar_indice_inicio(0)
     gn.empatar(xn)
+    obtenerAudioDesdeSenalDiscreta(gn)
     graficarInterpolacionDiezmacion(xn.obtener_datos(), gn.obtener_datos(), operacion, factor)
     ventana.mainloop()
-    obtenerAudioDesdeSenalDiscreta(gn)
 
 def interpolarAudio():
     """
     Comando asociado al botón "Interpolar" cuando la GUI está configurada para procesar audio
     """
-    xn = SenalDiscreta(senal.obtener_datos().copy().tolist(), 0, False)
+    xn = SenalDiscreta(senal.obtener_datos().copy(), 0, False)
     operacion = "Interpolación"
     factor = int(factorInterpolacionDiezmacion.get())
     # Se realiza la operación
     gn = obtenerInterpolacion(xn, factor)
     # Grafica
     gn.empatar(xn)
+    obtenerAudioDesdeSenalDiscreta(gn)
     graficarInterpolacionDiezmacion(xn.obtener_datos(), gn.obtener_datos(), operacion, factor)
     ventana.mainloop()
-    obtenerAudioDesdeSenalDiscreta(gn)
 
 def desplazamientoAudio():
     DesplazarCompleto(udsDesplazamiento.get()*44100)
@@ -985,6 +985,7 @@ def grabarGUI():
     """
     estadoGrabacion.set("Grabando...")
     global senal
+    grabarAudio()
     senal = obtenerSenalDiscretaDesdeAudio()
     estadoGrabacion.set("Audio grabado")
 
