@@ -1021,13 +1021,23 @@ def reflejarEnX():
     """
     Comando asociado al botón 'Reflejo en X'
     """
-    print("re")
+    res = obtener_reflejoX(senal)
+    obtenerAudioDesdeSenalDiscreta(res)
+
+    emparejarPuntosEjeHConInicio(res)
+
+    graficarSolo2(puntosEjeH, senal.obtener_datos(), res.obtener_datos(), "Reflejo en x")
 
 def reflejarEnY():
     """
     Comando asociado al botón 'Reflejo en Y'
     """
-    print("re")
+    res = obtener_reflejoY(senal)
+    obtenerAudioDesdeSenalDiscreta(res)
+
+    emparejarPuntosEjeHConInicio(res)
+
+    graficarSolo2(puntosEjeH, senal.obtener_datos(), res.obtener_datos(), "Reflejo en x")
 
 crearVentana()
 verInicio()
