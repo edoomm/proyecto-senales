@@ -15,7 +15,7 @@ from operacionConvolucion import *
 from operacionAmplificacionAtenuacion import *
 from operacionInterpolacionDiezmacion import *
 from operacionDesplazamiento import *
-from operacionFFT import *
+from operacionFFT import obtener_FFT, graficarFFT, graficarFFT2
 
 ventana = Tk()
 
@@ -202,7 +202,7 @@ def introducirValores():
            bd=8, background="#ffb3cc", height=1, command=fft,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*7+yPosicion)
 
-    Button(ventana, text="Pruebas", command=tests).place(x=xPosicion+15, y=espacio*8+yPosicion)
+    # Button(ventana, text="Pruebas", command=tests).place(x=xPosicion+15, y=espacio*8+yPosicion)
 
     #Checkboxes
     Checkbutton(ventana, text="Periodica", variable=xesperiodica).place(x=615, y=25)
@@ -283,7 +283,7 @@ def introducirValoresAudio():
            bd=8, background="#ffb3cc", height=1, command=fft_audio,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*7+yPosicion)
 
-    Button(ventana, text="Pruebas", command=tests).place(x=xPosicion+15, y=espacio*8+yPosicion)
+    # Button(ventana, text="Pruebas", command=tests).place(x=xPosicion+15, y=espacio*8+yPosicion)
 
     ventana.mainloop()
 
@@ -520,6 +520,7 @@ def reflejarEnXyY():
     senal = concatenarSecuenciaX()
     xn = senal[0]
 
+    senal = SenalDiscreta(xn.obtener_datos(), xn.obtener_indice_inicio(), xn.es_periodica())
 
     # Se realiza la operación
     gnY = obtener_reflejoY(xn)
@@ -532,10 +533,14 @@ def reflejarEnXyY():
 
     gnX = SenalDiscreta(datosAux, xn.obtener_indice_inicio(), xn.es_periodica())
 
+    originalData =  senal.obtener_datos()[:]
+    for i in range(len(originalData)):
+        originalData[i]*=-1
+    senal.asignar_datos(originalData)
 
     operacion = "Reflejar" # ------------------------LINEA A CAMBIAR
-    # Se configura la GUI
-    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("x", gnX), obtenerSecuencia("x", gnY))
+    # Se configura la GU
+    configurarPantalla(operacion, obtenerSecuencia("f", senal), obtenerSecuencia("x", gnX), obtenerSecuencia("y", gnY))
     # Grafica
     graficarReflejo(puntosEjeH, gnX.obtener_datos(), gnY.obtener_datos(), operacion)
 
@@ -662,7 +667,7 @@ def fft_audio():
     plt.subplot(121)
     plt.plot(T1N)
     plt.show()
-    # ventana.mainloop()
+    ventana.mainloop()
 
 # TODO: Validar valores de las entradas
 def emparejarValores():
@@ -822,7 +827,7 @@ def desplazar():
 
     gn = obtener_Desplazamiento(xn, udsDesplazamiento.get())
 
-    emparejarPuntosEjeHConInicio(gn)
+    # emparejarPuntosEjeHConInicio(gn)
     # xncopia.empatar(gn)
 
     # Se realiza la operación
