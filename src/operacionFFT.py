@@ -21,7 +21,7 @@ def graficarFFT(transformada):
     plt.show()
 
 def graficarFFT2(senial):
-    T1=dct(senial)
+    T1=fft(senial)
 
     maximoT1 = max(T1)
     T1N=T1/maximoT1
