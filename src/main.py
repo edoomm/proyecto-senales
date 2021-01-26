@@ -282,13 +282,7 @@ def introducirValoresAudio():
     ventana.mainloop()
 
 def tests():
-    """
-    Función para hacer pruebas solamente
-    """
-
-    estadoGrabacion.set("Grabando...")
-    senal = obtenerSenalDiscretaDesdeAudio()
-    estadoGrabacion.set("Audio grabado")
+    print("test")
 
 def emparejarPuntosEjeHConInicio(senal):
     """
@@ -417,7 +411,6 @@ def obtenerSecuencia(variable, senal):
 
     return secuencia
 
-# Esta función será el modelo a seguir para las demas operaciones
 def sumar():
     """
     Comando asociado al botón "Sumar"
@@ -617,6 +610,7 @@ def fft():
     ventana.mainloop()
 
 # TODO: Validar valores de las entradas
+# TODO: Cambiar lógica para señales periodicas y no periodicas
 def emparejarValores():
     
     '''Hace las listas correspondientes a x(n) y h(n) del mismo tamaño y las asigna newX y newH así como prepara los puntos en el eje horizontal de las gráficas para su posterior ploteo
@@ -636,23 +630,13 @@ def emparejarValores():
     xRAux = xR.get().split(",")
 
     # Se resetea newX, newH y puntosEjeH
-    newX = []
     newH = []
     puntosEjeH = []
 
-    if len(hLAux)>len(xLAux):
-        for i in range(len(hLAux)-len(xLAux)):
-            newX.append(float(0))
     if len(xLAux)>len(hLAux):
         for i in range(len(xLAux)-len(hLAux)):
             newH.append(float(0))
 
-    for elemento in xLAux:
-        if elemento != "":
-            newX.append(float(elemento))
-        else:
-            newX.append(float(0))
-    newX.append(float(xO.get()))
     for elemento in hLAux:
         if elemento != "":
             newH.append(float(elemento))
@@ -672,37 +656,54 @@ def emparejarValores():
     #debe de invertir para que quede como en una
     #grafica normal
     puntosEjeH.reverse()
-
-    for elemento in xRAux:
-        if elemento != "":
-            newX.append(float(elemento))
-        else:
-            newX.append(float(0))
+    
     for elemento in hRAux:
         if elemento != "":
             newH.append(float(elemento))
         else:
             newH.append(float(0))
-
-    if len(hRAux) > len(xRAux):
-        for i in range(len(hRAux) - len(xRAux)):
-            newX.append(float(0))
-    if len(xRAux) > len(hRAux):
-        for i in range(len(xRAux) - len(hRAux)):
+            
+    for i in range(len(xRAux) - len(hRAux)):
             newH.append(float(0))
     for i in range(len(newH)-len(puntosEjeH)):
         puntosEjeH.append(i+1)
 
-    # Cálculo del indice de inicio de las listas
-    iinicio = 0
-    if len(xLAux) != 0 and len(hLAux) != 0:
-        if len(xLAux) > len (hLAux):
-            iinicio = -len(xLAux)
-        else:
-            iinicio = -len(hLAux) 
+    # Se convierten listas para x
+    xls = []
+    xrs = []
+    for i in xLAux:
+        if i != '':
+            xls.append(float(i))
+    for i in xRAux:
+        if i != '':
+            xrs.append(float(i))
+    # Se convierte listas para h
+    hls = []
+    hrs = []
+    for i in hLAux:
+        if i != '':
+            hls.append(float(i))
+    for i in hRAux:
+        if i != '':
+            hrs.append(float(i))
+    
+    # Obteniendo datos para x
+    indice_x = 0
+    if len(xLAux) > 0:
+        if xLAux[0] != '':
+            indice_x = -len(xLAux)
+    indice_h = 0
+    if len(xRAux) > 0:
+        if xRAux[0] != '':
+            indice_h = -len(hLAux)
 
-    xn = SenalDiscreta(newX, iinicio, xesperiodica.get())
-    hn = SenalDiscreta(newH, iinicio, hesperiodica.get())
+    print(xls)
+    print(xrs)
+    xn = SenalDiscreta(xls + [int(xO.get())] + xrs, indice_x, xesperiodica.get())
+    hn = SenalDiscreta(hls + [int(xO.get())] + hrs, indice_h, hesperiodica.get())
+    
+    xn.empatar(hn)
+
     return [xn, hn]
 
 
