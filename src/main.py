@@ -15,6 +15,7 @@ from operacionConvolucion import *
 from operacionAmplificacionAtenuacion import *
 from operacionInterpolacionDiezmacion import *
 from operacionDesplazamiento import *
+from operacionFFT import *
 
 ventana = Tk()
 
@@ -53,6 +54,7 @@ estadoGrabacion = StringVar()
 # segun sea el caso
 newH = [] # Lista para h(n) de longitud estandar
 newX = [] # Lista para x(n) de longitud estandar
+newX2 = []
 puntosEjeH = [] # Lista que contiene los puntos en donde se graficaran las listas en el eje horizontal
 
 def crearVentana():
@@ -250,7 +252,7 @@ def introducirValoresAudio():
            font=("Arial", 16)).place(x=xPosicion, y=espacio*3+yPosicion)
 
     Button(ventana, text="Desplazamiento", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=desplazar,
+           bd=8, background="#ffb3cc", height=1, command=desplazamientoAudio,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*4+yPosicion)
 
     Entry(ventana,justify=CENTER, textvariable=udsDesplazamiento, width=4,
@@ -282,7 +284,7 @@ def introducirValoresAudio():
     ventana.mainloop()
 
 def tests():
-    print("test")
+    print("")
 
 def emparejarPuntosEjeHConInicio(senal):
     """
@@ -522,36 +524,6 @@ def reflejarEnXyY():
 
     ventana.mainloop()
 
-def desplazar():
-    """
-    Comando asociado al botón "Desplazar"
-    """
-    # Obtiene datos de GUI
-    senales = concatenarSecuenciaX()
-    xn = senales[0]
-    td = udsDesplazamiento.get()
-    # Se realiza la operación
-    gn1 = obtener_Desplazamiento(xn, 1, td) # Desplazamiento a la derecha
-    gn2 = obtener_Desplazamiento(xn, 2, td) # Desplazamiento a la izquierda
-
-    # Emparejando
-    xn.empatar(gn1)
-    emparejarPuntosEjeHConInicio(xn)
-
-    print("xn:", xn)
-    print("gn1:", gn1)
-    print("gn2:", gn2)
-    print("pts:", puntosEjeH)
-
-
-    operacion = "Desplazamiento" # ------------------------LINEA A CAMBIAR
-    # Se configura la GUI
-    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("gn1", gn1), obtenerSecuencia("gn2", gn2))
-    # Grafica
-    graficar(puntosEjeH, xn.obtener_datos(), gn1.obtener_datos(), gn2.obtener_datos(), operacion)
-
-    ventana.mainloop()
-
 def diezmar():
     """
     Comando asociado al botón "Diezmación"
@@ -590,12 +562,11 @@ def interpolar():
     graficarSolo2(range(gn.obtener_longitud()), xn.obtener_datos(), gn.obtener_datos(), operacion)
     ventana.mainloop()
     
-
 def diezmarAudio():
     """
     Comando asociado al botón "Diezmar" cuando la GUI está configurada para procesar audio
     """
-    xn = SenalDiscreta(senal.obtener_datos().copy().tolist(), 0, False)
+    xn = SenalDiscreta(senal.obtener_datos().copy(), 0, False)
     operacion = "Diezmación"
     factor = int(factorInterpolacionDiezmacion.get())
     # Se realiza la operación
@@ -603,24 +574,27 @@ def diezmarAudio():
     # Grafica
     gn.asignar_indice_inicio(0)
     gn.empatar(xn)
+    obtenerAudioDesdeSenalDiscreta(gn)
     graficarInterpolacionDiezmacion(xn.obtener_datos(), gn.obtener_datos(), operacion, factor)
     ventana.mainloop()
-    obtenerAudioDesdeSenalDiscreta(gn)
 
 def interpolarAudio():
     """
     Comando asociado al botón "Interpolar" cuando la GUI está configurada para procesar audio
     """
-    xn = SenalDiscreta(senal.obtener_datos().copy().tolist(), 0, False)
+    xn = SenalDiscreta(senal.obtener_datos().copy(), 0, False)
     operacion = "Interpolación"
     factor = int(factorInterpolacionDiezmacion.get())
     # Se realiza la operación
     gn = obtenerInterpolacion(xn, factor)
     # Grafica
     gn.empatar(xn)
+    obtenerAudioDesdeSenalDiscreta(gn)
     graficarInterpolacionDiezmacion(xn.obtener_datos(), gn.obtener_datos(), operacion, factor)
     ventana.mainloop()
-    obtenerAudioDesdeSenalDiscreta(gn)
+
+def desplazamientoAudio():
+    DesplazarCompleto(udsDesplazamiento.get()*44100)
 
 # La falta de ortografia es adrede, porque ya existe la función sin falta de ortografia jaja
 def convolusionar():
@@ -652,22 +626,17 @@ def fft():
     Comando asociado al botón "FFT"
     """
     # Obtiene datos de GUI
-    senales = emparejarValores()
+    senales = concatenarSecuenciaX()
     xn = senales[0]
-    hn = senales[1]
     # Se realiza la operación
-    gn = obtenerSuma(xn, hn) # ------------------LINEA A CAMBIAR
+    gn = obtener_FFT(xn) # ------------------LINEA A CAMBIAR
 
-    operacion = "Suma" # ------------------------LINEA A CAMBIAR
+    operacion = "FFT" # ------------------------LINEA A CAMBIAR
     # Se configura la GUI
-    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
-    # Grafica
-    graficar(puntosEjeH, xn.obtener_datos(), hn.obtener_datos(), gn.obtener_datos(), operacion)
-
+    configurarPantallaDeUnSoloValor(operacion, xn.obtener_datos(), gn.obtener_datos())
     ventana.mainloop()
 
 # TODO: Validar valores de las entradas
-# TODO: Cambiar lógica para señales periodicas y no periodicas
 def emparejarValores():
     
     '''Hace las listas correspondientes a x(n) y h(n) del mismo tamaño y las asigna newX y newH así como prepara los puntos en el eje horizontal de las gráficas para su posterior ploteo
@@ -748,12 +717,10 @@ def emparejarValores():
         if xLAux[0] != '':
             indice_x = -len(xLAux)
     indice_h = 0
-    if len(xRAux) > 0:
-        if xRAux[0] != '':
+    if len(hLAux) > 0:
+        if hLAux[0] != '':
             indice_h = -len(hLAux)
 
-    print(xls)
-    print(xrs)
     xn = SenalDiscreta(xls + [float(xO.get())] + xrs, indice_x, xesperiodica.get())
     hn = SenalDiscreta(hls + [float(hO.get())] + hrs, indice_h, hesperiodica.get())
     
@@ -817,6 +784,108 @@ def concatenarSecuenciaX():
     xn = SenalDiscreta(newX, -len(xLAux), xesperiodica.get())
 
     return [xn]
+
+
+def desplazar():
+    global newX,newX2,puntosEjeH
+
+    xn = concatenarSecuenciaX()[0]
+
+    print("xn:", xn)
+    gn = obtener_Desplazamiento(xn, udsDesplazamiento.get())
+    print("xn:", xn)
+
+    # Se realiza la operación
+    operacion = "Desplazar"
+    # Se configura la GUI
+    print(gn)
+    configurarPantallaDeUnSoloValor(operacion, xn.obtener_datos(), gn.obtener_datos())
+    # Grafica
+    graficarSoloUna(puntosEjeH, gn, operacion)
+    ventana.mainloop()
+
+
+def obtenerDesplazamiento():
+    global puntosEjeH,newX,newX2
+    #la funcion split sirve para separar
+    #la cadena cada vez que hay un
+    #determinado caracter, aqui en es las ","
+    xLAux = xL.get().split(",")
+    xRAux = xR.get().split(",")
+
+    newX2 = []
+
+    for elemento in xLAux:
+        if elemento != "":
+            newX2.append(float(elemento))
+        else:
+            newX2.append(float(0))
+    newX2.append(float(xO.get()))
+
+    for elemento in xRAux:
+        if elemento != "":
+            newX2.append(float(elemento))
+        else:
+            newX2.append(float(0))
+
+    if udsDesplazamiento.get()<0:
+        xLAux.reverse()
+        for i in range(udsDesplazamiento.get()):
+            xLAux.append(float(0))
+        xLAux.reverse()
+    else:
+        for i in range(udsDesplazamiento.get()):
+            xRAux.append(float(0))        
+
+    # Se resetea newX, newH y puntosEjeH
+    newX = []
+    puntosEjeH = []
+
+    #int(udsDesplazamiento.get())
+
+    for elemento in xLAux:
+        if elemento != "":
+            newX.append(float(elemento))
+        else:
+            newX.append(float(0))
+    newX.append(float(xO.get()))
+    #Para guardar el origen se cuenta desde
+    #el, y se cuentan la cantidad de elementos
+    #a la izquierda etiquetandolos como se
+    #encontrarian en la grafica
+    for i in range(len(newX)+udsDesplazamiento.get()):
+        puntosEjeH.append(i*(-1))
+
+    #el arreglo se invierte debido a que en el
+    #arreglo tenemos 0,-1,-2 por ejemplo, y se
+    #debe de invertir para que quede como en una
+    #grafica normal
+    puntosEjeH.reverse()
+
+    for elemento in xRAux:
+        if elemento != "":
+            newX.append(float(elemento))
+        else:
+            newX.append(float(0))
+
+    if udsDesplazamiento.get()<0:
+        newX.reverse()
+        for i in range((udsDesplazamiento.get()*(-1))-2):
+            newX.append(float(0))
+        newX.reverse()
+    
+    for i in range(len(newX)-len(puntosEjeH)):
+        puntosEjeH.append(i+1)
+
+
+def graficarSoloUna(puntosEjeH,resultado,operacion):
+    plt.suptitle(operacion+' x(n)')
+    markerline, stemlines, baseline = plt.stem(puntosEjeH, resultado, '-.')
+    pyplot.axhline(0, color="black")
+    pyplot.axvline(0, color="black")
+    plt.ylabel('x(n)')
+    plt.show()
+
 
 def graficar(puntosEjeH,newX,newH, resultado,operacion):
     #puntosEjeH se refiere al eje vertical
@@ -916,6 +985,7 @@ def grabarGUI():
     """
     estadoGrabacion.set("Grabando...")
     global senal
+    grabarAudio()
     senal = obtenerSenalDiscretaDesdeAudio()
     estadoGrabacion.set("Audio grabado")
 
