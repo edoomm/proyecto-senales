@@ -28,9 +28,6 @@ def DesplazarCompleto(tamanioDesplazamiento):
     graficarSenalDiscretaDeAudio(senial,senial2)
     obtenerAudioDesdeSenalDiscreta(senial2)
 
-
-DesplazarCompleto(44100)
-
 # x = SenalDiscreta([1,2,3],-2,True)
 # print(obtener_Desplazamiento(x, 1, 4))
 # print(obtener_Desplazamiento(x, 2, 4))
