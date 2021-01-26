@@ -32,9 +32,6 @@ def getTiempoDeGrabado():
     return tiempoGrabado
 
 def grabarAudio():
-    #Aqui Grabamos el WAV de n segundos y 
-    #guardamos con el nombre de que querramos en el folder de "src"
-
     print('...Grabando')
     senial=[]
     for i in range(int((frecuenciaDeMuestreo/tamanioVentana)*tiempoGrabado+1)):
@@ -52,9 +49,18 @@ def grabarAudio():
     wavefile.close()
      
 def obtenerSenalDiscretaDesdeAudio():
-    Fr, data = read("src/entrada.wav") #Leemos archivo obteniendo frecuencia y arreglo con canales
-    return SenalDiscreta(data[:,0], 0, False) #Se toma como data solo el primer canal
+    grabarAudio()
+    Fr, data = read("entrada.wav") #Leemos archivo obteniendo frecuencia y arreglo con canales
+    for i in range(40):
+        print(data[i])
+    return SenalDiscreta(data, 0, False) #Se toma como data solo el primer canal
 
 def obtenerAudioDesdeSenalDiscreta(senal):
-    write("src/salida.wav", frecuenciaDeMuestreo, np.array(senal.obtener_datos()))
+    write("salida.wav", frecuenciaDeMuestreo, np.array(senal.obtener_datos()))
 
+# #CODIGO DE PRUEBA
+# from operacionReflejo import *
+# senal = obtenerSenalDiscretaDesdeAudio()
+# print(len(senal.obtener_datos()))
+# senal2 = obtener_reflejo(senal,2)
+# obtenerAudioDesdeSenalDiscreta(senal2)

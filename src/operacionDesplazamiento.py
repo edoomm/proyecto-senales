@@ -5,13 +5,17 @@ def obtener_Desplazamiento(senal,direccion,tamanioDesplazamiento): #Desplazamien
     desplazamiento=[] #Lista auxiliar donde se guardaran los desplazamientos
     if(direccion==1):     
         datosAux = senal.obtener_datos()
-        for i in tamanioDesplazamiento:
-            desplazamiento[i] = 0
+        for i in range(0, tamanioDesplazamiento):
+            desplazamiento.append(0)
         datosAux=desplazamiento+datosAux
-        return SenalDiscreta(datosAux, senal.obtener_indice_inicio() + tamanioDesplazamiento, senal.es_periodica())
+        return SenalDiscreta(datosAux, senal.obtener_indice_inicio(), senal.es_periodica())
     elif(direccion==2):   
         datosAux = senal.obtener_datos()
-        for i in range(len(datosAux)):
-            if(i>=tamanioDesplazamiento):
-                desplazamiento.append(datosAux(i))
-        return SenalDiscreta(desplazamiento,senal.obtener_indice_inicio - tamanioDesplazamiento , senal.es_periodica())
+        for i in range(0, tamanioDesplazamiento):
+            desplazamiento.insert(len(desplazamiento), 0)
+        datosAux=datosAux+desplazamiento
+        return SenalDiscreta(datosAux, senal.obtener_indice_inicio() - tamanioDesplazamiento, senal.es_periodica())
+
+# x = SenalDiscreta([1,2,3],-2,True)
+# print(obtener_Desplazamiento(x, 1, 4))
+# print(obtener_Desplazamiento(x, 2, 4))
