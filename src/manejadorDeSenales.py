@@ -64,7 +64,7 @@ def graficarSenalDiscretaDeAudio(senalVieja, senalNueva):
     datosViejos = senalVieja.obtener_datos()
     datosNuevos = senalNueva.obtener_datos()
     lenAux = len(datosViejos)
-    for i in range(0,len(lenAux)):
+    for i in range(0,lenAux):
         x.append(i)
     plt.figure()
     plt.subplot(121)

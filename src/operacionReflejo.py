@@ -27,7 +27,8 @@ def obtener_reflejoY(senal):
     inicioAux = - len(datosAux) + 1 - senal.obtener_indice_inicio()
     return SenalDiscreta(datosAux, inicioAux, senal.es_periodica())
 
-def obtener_reflejoHacerTodo(senal, tipoReflejo=2):
+def reflejar_todo(tipoReflejo=2):
+    senal = obtenerSenalDiscretaDesdeAudio()
     if(tipoReflejo==1):     #Para reflejo sobre el eje X
         datosAux = senal.obtener_datos()
         for i in range(len(datosAux)):
@@ -40,7 +41,9 @@ def obtener_reflejoHacerTodo(senal, tipoReflejo=2):
     graficarSenalDiscretaDeAudio(senal, senalAux)
     obtenerAudioDesdeSenalDiscreta(senalAux)
 
+
 #CODIGO DE PRUEBA:
+# reflejar_todo()
 # senal1 = SenalDiscreta([1, 2, 3, 4], -2, False)
 # print("Senal original:")
 # print(senal1)
