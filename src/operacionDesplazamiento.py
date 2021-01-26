@@ -1,5 +1,4 @@
-
-from manejadorDeSenales import manejadorDeSenales
+from manejadorDeSenales import *
 
 def obtener_Desplazamiento(senal,tamanioDesplazamiento): #Desplazamientos si es 1 se desplaza a la Derecha si es 2 a la izquierda
     desplazamiento=[] #Lista auxiliar donde se guardaran los desplazamientos
