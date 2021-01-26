@@ -562,7 +562,7 @@ def diezmar():
     configurarPantallaDeUnSoloValor(operacion, xn.obtener_datos(), gn.obtener_datos())
     # Grafica
     gn.empatar(xn)
-    graficarSolo2(range(gn.obtener_longitud()), xn.obtener_datos(), gn.obtener_datos(), operacion)
+    graficarSolo2(range(gn.obtener_indice_inicio(), gn.obtener_longitud()+gn.obtener_indice_inicio()), xn.obtener_datos(), gn.obtener_datos(), operacion)
     ventana.mainloop()
 
 def interpolar():
@@ -581,7 +581,7 @@ def interpolar():
     configurarPantallaDeUnSoloValor(operacion, xn.obtener_datos(), gn.obtener_datos())
     # Grafica
     gn.empatar(xn)
-    graficarSolo2(range(gn.obtener_longitud()), xn.obtener_datos(), gn.obtener_datos(), operacion)
+    graficarSolo2(range(gn.obtener_indice_inicio(), gn.obtener_longitud()+gn.obtener_indice_inicio()), xn.obtener_datos(), gn.obtener_datos(), operacion)
     ventana.mainloop()
     
 def diezmarAudio():
