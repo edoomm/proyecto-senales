@@ -15,6 +15,7 @@ from operacionConvolucion import *
 from operacionAmplificacionAtenuacion import *
 from operacionInterpolacionDiezmacion import *
 from operacionDesplazamiento import *
+from operacionFFT import *
 
 ventana = Tk()
 
@@ -656,18 +657,14 @@ def fft():
     Comando asociado al botón "FFT"
     """
     # Obtiene datos de GUI
-    senales = emparejarValores()
+    senales = concatenarSecuenciaX()
     xn = senales[0]
-    hn = senales[1]
     # Se realiza la operación
-    gn = obtenerSuma(xn, hn) # ------------------LINEA A CAMBIAR
+    gn = obtener_FFT(xn) # ------------------LINEA A CAMBIAR
 
-    operacion = "Suma" # ------------------------LINEA A CAMBIAR
+    operacion = "FFT" # ------------------------LINEA A CAMBIAR
     # Se configura la GUI
-    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("h", hn), obtenerSecuencia("g", gn))
-    # Grafica
-    graficar(puntosEjeH, xn.obtener_datos(), hn.obtener_datos(), gn.obtener_datos(), operacion)
-
+    configurarPantallaDeUnSoloValor(operacion, xn.obtener_datos(), gn.obtener_datos())
     ventana.mainloop()
 
 # TODO: Validar valores de las entradas
