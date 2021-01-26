@@ -453,8 +453,22 @@ def restar():
     senales = emparejarValores()
     xn = senales[0]
     hn = senales[1]
+    # Desarrolla expansión para periocidad
+    if xn.es_periodica():
+        xn.expandir_periodo_izquierda(1)
+        xn.expandir_periodo_derecha(1)
+        hn.empatar(xn)
+
+    if hn.es_periodica():
+        hn.expandir_periodo_izquierda(1)
+        hn.expandir_periodo_derecha(1)
+        xn.empatar(hn)
+        
+    emparejarPuntosEjeHConInicio(xn)
     # Se realiza la operación
     gn = obtenerResta(xn, hn) # ------------------LINEA A CAMBIAR
+    gn.empatar(xn)
+    gn.empatar(hn)
 
     operacion = "Restar" # -----------------------LINEA A CAMBIAR
     # Se configura la GUI
