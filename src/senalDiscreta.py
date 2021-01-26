@@ -94,20 +94,37 @@ class SenalDiscreta:
         else:
             self.datos = self.datos + auxiliar
 
+    # Expande hacia la izquierda el numero de periodos indicados
+    # Si el periodo es N, la longitud de la senial despues de expandirla será
+    # len(senial) + N.
+    # Recibe el núero de periodos a expandir
+    def expandir_periodo_izquierda (self, periodos):
+        auxiliar = self.datos
+        for i in range(periodos):
+            auxiliar = self.periodo + auxiliar
+        self.datos = auxiliar
+        self.indice_inicio -= periodos * len(self.periodo)
+
+    # Expande hacia la derecha el numero de periodos indicados
+    # Si el periodo es N, la longitud de la senial despues de expandirla será
+    # senial.size() + N.
+    # Recibe el núero de periodos a expandir
+    def expandir_periodo_derecha (self, periodos):
+        auxiliar = self.datos
+        for i in range(periodos):
+            auxiliar = auxiliar + self.periodo
+        self.datos = auxiliar
+
     def __str__(self):
         return str(self.datos) + " inicio: " + str(self.indice_inicio) + " periodica: " + str(self.periodica)
 
 
-# x = SenalDiscreta([1,2,3],-2,True)
-# y = SenalDiscreta([1,2,3,5],-2,True)
-# y.empatar(x)
-# print(x)
-# print(x)
-# x.expandir_izquierda(3)
-# print(x)
-# x.expandir_izquierda(2)
-# print(x)
-# x.expandir_izquierda(2)
-# print(x)
-# x.expandir_izquierda(2)
-# print(x)
+
+
+x = SenalDiscreta([1,2,3],-2,True)
+y = SenalDiscreta([1,2],0,True)
+print(y)
+y.expandir_periodo_izquierda(1)
+print(y)
+y.expandir_periodo_derecha(1)
+print(y)
