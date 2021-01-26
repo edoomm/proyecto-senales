@@ -1,4 +1,5 @@
 from senalDiscreta import SenalDiscreta
+import matplotlib.pyplot as plt
 import numpy as np
 from IPython.display import Audio
 from scipy.io.wavfile import read, write
@@ -58,9 +59,20 @@ def obtenerSenalDiscretaDesdeAudio():
 def obtenerAudioDesdeSenalDiscreta(senal):
     write("salida.wav", frecuenciaDeMuestreo, np.array(senal.obtener_datos()))
 
-# #CODIGO DE PRUEBA
+def graficarSenalDiscretaDeAudio(senal):
+    x = [0]
+    datos = senal.obtener_datos()
+    lenAux = len(datos)
+    for i in range(0,len(datos)):
+        x.append(i)
+    plt.figure()
+    plt.plot(x[0:(lenAux-1)], datos[0:(lenAux-1)], 'o')
+    plt.show()
+
+#CODIGO DE PRUEBA
 # from operacionReflejo import *
 # senal = obtenerSenalDiscretaDesdeAudio()
+# graficarSenalDiscreta(senal)
 # print(len(senal.obtener_datos()))
 # senal2 = obtener_reflejo(senal,2)
 # obtenerAudioDesdeSenalDiscreta(senal2)
