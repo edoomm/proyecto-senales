@@ -129,16 +129,14 @@ class SenalDiscreta:
     def __str__(self):
         return str(self.datos) + " inicio: " + str(self.indice_inicio) + " periodica: " + str(self.periodica)
 
+#y = SenalDiscreta([1,2,3], 0, True)
+#print(y)
+#y.expandir_izquierda(2)
+#print(y)
+#y.expandir_izquierda(5)
+#print(y)
 
-
-y = SenalDiscreta([1,2,3,4,5,6,7,8,9],-3,True)
-print(y)
-y.expandir_izquierda(2)
-print(y)
-y.expandir_izquierda(2)
-print(y)
-
-y.expandir_derecha(2)
-print(y)
-y.expandir_derecha(2)
-print(y)
+#y.expandir_derecha(2)
+#print(y)
+#y.expandir_derecha(2)
+#print(y)
