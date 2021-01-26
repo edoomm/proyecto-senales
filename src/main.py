@@ -106,6 +106,22 @@ def verInicio():
            bd=10, background="#b5ead7", height=0, command=introducirValoresAudio,
            font=("Arial", 19)).place(x=360, y=70)
 
+    portada = """
+    Programa que permite realizar Operaciones Básicas a una señal de entrada ingresada por el usuario, \n
+    siendo ésta ya sea una secuencia de valores x(n) & h(n) o una señal de audio desde micrófono de máximo \n
+    3 segundos, de acuerdo a un menú principal\n\n
+    Integrantes:
+    Mendoza Martínez Eduardo 3CM5  \n
+    Sandoval Hernández Kevin Edwin 3CV5 \n
+    Valle Ortiz Edilberto Sergio 3CV5 \n
+    Hernández Magallón Erick Raziel 3CM5 \n
+    Ayala Segoviano Donaldo Horacio 3CM5 \n
+    Álvarez Garrido Ian Federico 3CM5 \n
+    López Vela Humberto Israel 3CV5 \n
+    """
+    Label(ventana, text=portada,
+          font=("Arial", 10)).place(x=30, y=200)
+
     ventana.mainloop()
 
 def introducirValores():
