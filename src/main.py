@@ -247,9 +247,13 @@ def introducirValoresAudio():
     Label(ventana, text="Multiplicador",
           font=("Arial", 10)).place(x=380, y=225)
 
-    Button(ventana, text="Reflejo en X y Y", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=reflejarEnXyY,
+    Button(ventana, text="Reflejo en X", cursor="hand2",
+           bd=8, background="#ffb3cc", height=1, command=reflejarEnX,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*3+yPosicion)
+
+    Button(ventana, text="Reflejo en Y", cursor="hand2",
+           bd=8, background="#ffb3cc", height=1, command=reflejarEnY,
+           font=("Arial", 16)).place(x=xPosicion+160, y=espacio*3+yPosicion)
 
     Button(ventana, text="Desplazamiento", cursor="hand2",
            bd=8, background="#ffb3cc", height=1, command=desplazamientoAudio,
@@ -276,7 +280,7 @@ def introducirValoresAudio():
            font=("Arial", 16)).place(x=xPosicion+145, y=espacio*5+yPosicion)
 
     Button(ventana, text="FFT", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=fft,
+           bd=8, background="#ffb3cc", height=1, command=fft_audio,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*7+yPosicion)
 
     Button(ventana, text="Pruebas", command=tests).place(x=xPosicion+15, y=espacio*8+yPosicion)
@@ -636,6 +640,13 @@ def fft():
     configurarPantallaDeUnSoloValor(operacion, xn.obtener_datos(), gn.obtener_datos())
     ventana.mainloop()
 
+def fft_audio():
+    """
+    Comando asociado al botón "FFT"
+    """
+    graficarFFT2(obtenerNumpyDesdeAudio().obtener_datos())
+    # ventana.mainloop()
+
 # TODO: Validar valores de las entradas
 def emparejarValores():
     
@@ -791,9 +802,9 @@ def desplazar():
 
     xn = concatenarSecuenciaX()[0]
 
-    print("xn:", xn)
     gn = obtener_Desplazamiento(xn, udsDesplazamiento.get())
-    print("xn:", xn)
+
+    emparejarPuntosEjeHConInicio(gn)
 
     # Se realiza la operación
     operacion = "Desplazar"
@@ -801,7 +812,7 @@ def desplazar():
     print(gn)
     configurarPantallaDeUnSoloValor(operacion, xn.obtener_datos(), gn.obtener_datos())
     # Grafica
-    graficarSoloUna(puntosEjeH, gn, operacion)
+    graficarSoloUna(puntosEjeH, gn.obtener_datos(), operacion)
     ventana.mainloop()
 
 
@@ -988,6 +999,18 @@ def grabarGUI():
     grabarAudio()
     senal = obtenerSenalDiscretaDesdeAudio()
     estadoGrabacion.set("Audio grabado")
+
+def reflejarEnX():
+    """
+    Comando asociado al botón 'Reflejo en X'
+    """
+    print("re")
+
+def reflejarEnY():
+    """
+    Comando asociado al botón 'Reflejo en Y'
+    """
+    print("re")
 
 crearVentana()
 verInicio()

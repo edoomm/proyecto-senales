@@ -48,7 +48,13 @@ def grabarAudio():
     wavefile.setframerate(frecuenciaDeMuestreo)
     wavefile.writeframes(b''.join(senial))
     wavefile.close()
-     
+
+def obtenerNumpyDesdeAudio():
+    # grabarAudio()
+    Fr, data = read("entrada.wav") #Leemos archivo obteniendo frecuencia y arreglo con canales
+    
+    return SenalDiscreta(data, 0, False) #Se toma como data solo el primer canal
+
 def obtenerSenalDiscretaDesdeAudio():
     # grabarAudio()
     Fr, data = read("entrada.wav") #Leemos archivo obteniendo frecuencia y arreglo con canales
