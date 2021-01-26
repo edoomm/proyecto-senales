@@ -244,10 +244,10 @@ class SenalDiscreta:
         return str(self.datos) + " inicio: " + str(self.indice_inicio) + " periodica: " + str(self.periodica)
 
 
-x = SenalDiscreta([1,2,3],-2,True)
-y = SenalDiscreta([1,2,3,4],0,True)
-print(y)
-y.expandir_derecha(5)
-print(y)
-y.expandir_izquierda(7)
-print(y)
+#x = SenalDiscreta([1,2,3],-2,True)
+#y = SenalDiscreta([1,2,3,4],0,True)
+#print(y)
+#y.expandir_derecha(5)
+#print(y)
+#y.expandir_izquierda(7)
+#print(y)
