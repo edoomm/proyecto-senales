@@ -46,9 +46,20 @@ def obtener_Desplazamiento(senal,tamanioDesplazamiento): #Desplazamientos si es 
     else:
         return senal
 
+def desplazarPeriodica(senal, desplazamiento):
+    indice_actual = senal.obtener_indice_inicio()
+    if desplazamiento < 0:
+        senal.expandir_derecha(abs(desplazamiento))
+    else:
+        senal.expandir_izquierda(abs(desplazamiento))
+    senal.asignar_indice_inicio(indice_actual - desplazamiento)
+    return senal
+
+
 def DesplazarCompleto(tamanioDesplazamiento):
     senial=obtenerSenalDiscretaDesdeAudio()
     senial2=obtener_Desplazamiento(senial,tamanioDesplazamiento)
+    graficarSenalDiscretaDeAudio(senial, senial2)
     obtenerAudioDesdeSenalDiscreta(senial2)
     graficarSenalDiscretaDeAudio(senial,senial2)
 
@@ -61,9 +72,4 @@ def desplazarPeriodica(senal, desplazamiento):
     senal.asignar_indice_inicio(indice_actual - desplazamiento)
     return SenalDiscreta(senal.obtener_datos(), senal.obtener_indice_inicio(), senal.es_periodica())
 
-x = SenalDiscreta([1,2,3],-2,True)
-print(x)
-x = obtener_Desplazamiento(x, 3)
-print(x)
-x = obtener_Desplazamiento(x, -3)
-print(x)
+
