@@ -233,9 +233,9 @@ def introducirValoresAudio():
 
     estadoGrabacion.set("Sin grabar")
 
-    Button(ventana, text="Escuchar entrada", command=tests, font=("Arial", 15)).place(x=100, y=75)
+    Button(ventana, text="Escuchar entrada", command=reproducirEntrada, font=("Arial", 15)).place(x=100, y=75)
 
-    Button(ventana, text="Escuchar salida", command=tests, font=("Arial", 15)).place(x=100+200, y=75)
+    Button(ventana, text="Escuchar salida", command=reproducirSalida, font=("Arial", 15)).place(x=100+200, y=75)
 
     Button(ventana, text="Amplificación / Atenuación", cursor="hand2",
            bd=8, background="#ffb3cc", height=1, command=amplificarAtenuarAudio,
@@ -611,7 +611,7 @@ def interpolarAudio():
     ventana.mainloop()
 
 def desplazamientoAudio():
-    DesplazarCompleto(udsDesplazamiento.get()*44100/2)
+    DesplazarCompleto(udsDesplazamiento.get()*int(44100/2))
 
 # La falta de ortografia es adrede, porque ya existe la función sin falta de ortografia jaja
 def convolusionar():
@@ -1038,6 +1038,17 @@ def reflejarEnY():
     emparejarPuntosEjeHConInicio(res)
 
     graficarSolo2(puntosEjeH, senal.obtener_datos(), res.obtener_datos(), "Reflejo en x")
+
+from pydub import AudioSegment
+from pydub.playback import play
+
+def reproducirEntrada():
+    song = AudioSegment.from_wav("entrada.wav")
+    play(song)
+
+def reproducirSalida():
+    song = AudioSegment.from_wav("Salida.wav")
+    play(song)
 
 crearVentana()
 verInicio()
