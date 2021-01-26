@@ -52,12 +52,30 @@ def grabarAudio():
 def obtenerSenalDiscretaDesdeAudio():
     grabarAudio()
     Fr, data = read("entrada.wav") #Leemos archivo obteniendo frecuencia y arreglo con canales
-    for i in range(40):
-        print(data[i])
-    return SenalDiscreta(data, 0, False) #Se toma como data solo el primer canal
+    l=[]    
+    for i in range(len(data)):
+        l.append(data[i])
+    return SenalDiscreta(l, 0, False) #Se toma como data solo el primer canal
+
+def osbtenerAudioDesdeSenalDiscreta(senal):
+    #write("salida.wav", frecuenciaDeMuestreo, np.array(senal.obtener_datos()))
+    
+    wavefile = wave.open('desplazado.wav','wb')
+    wavefile.setnchannels(canal)
+    wavefile.setsampwidth(audio.get_sample_size(pyaudio.paInt32))
+    wavefile.setframerate(frecuenciaDeMuestreo)
+    wavefile.writeframes(b''.join(np.array(senal.obtener_datos())))
+    wavefile.close()
 
 def obtenerAudioDesdeSenalDiscreta(senal):
-    write("salida.wav", frecuenciaDeMuestreo, np.array(senal.obtener_datos()))
+    Fr, data = read("entrada.wav")
+    datos = data
+    lenAux = len(data)
+    senalDatos = senal.obtener_datos()
+    for i in range(lenAux):
+        datos[i]=senalDatos[i]
+    write("salida.wav", frecuenciaDeMuestreo, datos)
+
 
 def graficarSenalDiscretaDeAudio(senalVieja, senalNueva):
     x = [0]
@@ -68,9 +86,9 @@ def graficarSenalDiscretaDeAudio(senalVieja, senalNueva):
         x.append(i)
     plt.figure()
     plt.subplot(121)
-    plt.plot(x[0:(lenAux-1)], datosViejos[0:(lenAux-1)], 'o')
+    plt.plot(x[0:(lenAux-1)], np.array(datosViejos[0:(lenAux-1)]), 'o')
     plt.subplot(122)
-    plt.plot(x[0:(lenAux-1)], datosNuevos[0:(lenAux-1)], 'o')
+    plt.plot(x[0:(lenAux-1)], np.array(datosNuevos[0:(lenAux-1)]), 'o')
     plt.show()
 
 #CODIGO DE PRUEBA
