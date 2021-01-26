@@ -57,16 +57,6 @@ def obtenerSenalDiscretaDesdeAudio():
         l.append(data[i])
     return SenalDiscreta(l, 0, False) #Se toma como data solo el primer canal
 
-def osbtenerAudioDesdeSenalDiscreta(senal):
-    #write("salida.wav", frecuenciaDeMuestreo, np.array(senal.obtener_datos()))
-    
-    wavefile = wave.open('desplazado.wav','wb')
-    wavefile.setnchannels(canal)
-    wavefile.setsampwidth(audio.get_sample_size(pyaudio.paInt32))
-    wavefile.setframerate(frecuenciaDeMuestreo)
-    wavefile.writeframes(b''.join(np.array(senal.obtener_datos())))
-    wavefile.close()
-
 def obtenerAudioDesdeSenalDiscreta(senal):
     Fr, data = read("entrada.wav")
     datos = data
@@ -74,7 +64,13 @@ def obtenerAudioDesdeSenalDiscreta(senal):
     senalDatos = senal.obtener_datos()
     for i in range(lenAux):
         datos[i]=senalDatos[i]
-    write("salida.wav", frecuenciaDeMuestreo, datos)
+    wavefile = wave.open('Salida.wav','wb')
+    wavefile.setnchannels(canal)
+    wavefile.setsampwidth(audio.get_sample_size(formato))
+    wavefile.setframerate(frecuenciaDeMuestreo)
+    wavefile.writeframes(b''.join(datos))
+    wavefile.close()
+    #write("salida.wav", frecuenciaDeMuestreo, datos)
 
 
 def graficarSenalDiscretaDeAudio(senalVieja, senalNueva):
