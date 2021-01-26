@@ -1,5 +1,5 @@
 from senalDiscreta import SenalDiscreta
-from scipy.fft import fft, fftfreq, fftshift
+from scipy.fft import fft, fftfreq, fftshift, dct
 import numpy
 import matplotlib.pyplot as plt
 
@@ -19,3 +19,12 @@ def graficarFFT(transformada):
     plt.plot(xf, 1 / transformada.size * numpy.abs(yplot))
     plt.grid()
     plt.show()
+
+def graficarFFT2(senial):
+    T1=fft(senial)
+
+    maximoT1 = max(T1)
+    T1N=T1/maximoT1
+    recorte = T1N[6000:16000]
+
+    return T1N

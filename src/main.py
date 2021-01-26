@@ -15,7 +15,7 @@ from operacionConvolucion import *
 from operacionAmplificacionAtenuacion import *
 from operacionInterpolacionDiezmacion import *
 from operacionDesplazamiento import *
-from operacionFFT import *
+from operacionFFT import obtener_FFT, graficarFFT, graficarFFT2
 
 ventana = Tk()
 
@@ -202,7 +202,7 @@ def introducirValores():
            bd=8, background="#ffb3cc", height=1, command=fft,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*7+yPosicion)
 
-    Button(ventana, text="Pruebas", command=tests).place(x=xPosicion+15, y=espacio*8+yPosicion)
+    # Button(ventana, text="Pruebas", command=tests).place(x=xPosicion+15, y=espacio*8+yPosicion)
 
     #Checkboxes
     Checkbutton(ventana, text="Periodica", variable=xesperiodica).place(x=615, y=25)
@@ -233,9 +233,9 @@ def introducirValoresAudio():
 
     estadoGrabacion.set("Sin grabar")
 
-    Button(ventana, text="Escuchar entrada", command=tests, font=("Arial", 15)).place(x=100, y=75)
+    Button(ventana, text="Escuchar entrada", command=reproducirEntrada, font=("Arial", 15)).place(x=100, y=75)
 
-    Button(ventana, text="Escuchar salida", command=tests, font=("Arial", 15)).place(x=100+200, y=75)
+    Button(ventana, text="Escuchar salida", command=reproducirSalida, font=("Arial", 15)).place(x=100+200, y=75)
 
     Button(ventana, text="Amplificación / Atenuación", cursor="hand2",
            bd=8, background="#ffb3cc", height=1, command=amplificarAtenuarAudio,
@@ -247,12 +247,16 @@ def introducirValoresAudio():
     Label(ventana, text="Multiplicador",
           font=("Arial", 10)).place(x=380, y=225)
 
-    Button(ventana, text="Reflejo en X y Y", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=reflejarEnXyY,
+    Button(ventana, text="Reflejo en X", cursor="hand2",
+           bd=8, background="#ffb3cc", height=1, command=reflejarEnX,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*3+yPosicion)
 
+    Button(ventana, text="Reflejo en Y", cursor="hand2",
+           bd=8, background="#ffb3cc", height=1, command=reflejarEnY,
+           font=("Arial", 16)).place(x=xPosicion+160, y=espacio*3+yPosicion)
+
     Button(ventana, text="Desplazamiento", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=desplazamientoAudio,
+           bd=8, background="#ffb3cc", height=1, command=desplazarAudio,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*4+yPosicion)
 
     Entry(ventana,justify=CENTER, textvariable=udsDesplazamiento, width=4,
@@ -276,10 +280,10 @@ def introducirValoresAudio():
            font=("Arial", 16)).place(x=xPosicion+145, y=espacio*5+yPosicion)
 
     Button(ventana, text="FFT", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=fft,
+           bd=8, background="#ffb3cc", height=1, command=fft_audio,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*7+yPosicion)
 
-    Button(ventana, text="Pruebas", command=tests).place(x=xPosicion+15, y=espacio*8+yPosicion)
+    # Button(ventana, text="Pruebas", command=tests).place(x=xPosicion+15, y=espacio*8+yPosicion)
 
     ventana.mainloop()
 
@@ -516,6 +520,7 @@ def reflejarEnXyY():
     senal = concatenarSecuenciaX()
     xn = senal[0]
 
+    senal = SenalDiscreta(xn.obtener_datos(), xn.obtener_indice_inicio(), xn.es_periodica())
 
     # Se realiza la operación
     gnY = obtener_reflejoY(xn)
@@ -528,10 +533,14 @@ def reflejarEnXyY():
 
     gnX = SenalDiscreta(datosAux, xn.obtener_indice_inicio(), xn.es_periodica())
 
+    originalData =  senal.obtener_datos()[:]
+    for i in range(len(originalData)):
+        originalData[i]*=-1
+    senal.asignar_datos(originalData)
 
     operacion = "Reflejar" # ------------------------LINEA A CAMBIAR
-    # Se configura la GUI
-    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("x", gnX), obtenerSecuencia("x", gnY))
+    # Se configura la GU
+    configurarPantalla(operacion, obtenerSecuencia("f", senal), obtenerSecuencia("x", gnX), obtenerSecuencia("y", gnY))
     # Grafica
     graficarReflejo(puntosEjeH, gnX.obtener_datos(), gnY.obtener_datos(), operacion)
 
@@ -607,7 +616,7 @@ def interpolarAudio():
     ventana.mainloop()
 
 def desplazamientoAudio():
-    DesplazarCompleto(udsDesplazamiento.get()*44100)
+    DesplazarCompleto(udsDesplazamiento.get()*int(44100/2))
 
 # La falta de ortografia es adrede, porque ya existe la función sin falta de ortografia jaja
 def convolusionar():
@@ -647,6 +656,17 @@ def fft():
     operacion = "FFT" # ------------------------LINEA A CAMBIAR
     # Se configura la GUI
     configurarPantallaDeUnSoloValor(operacion, xn.obtener_datos(), gn.obtener_datos())
+    ventana.mainloop()
+
+def fft_audio():
+    """
+    Comando asociado al botón "FFT"
+    """
+    T1N = graficarFFT2(obtenerNumpyDesdeAudio().obtener_datos())
+    obtenerAudioDesdeNumpy(T1N)
+    plt.subplot(121)
+    plt.plot(T1N)
+    plt.show()
     ventana.mainloop()
 
 # TODO: Validar valores de las entradas
@@ -803,20 +823,30 @@ def desplazar():
     global newX,newX2,puntosEjeH
 
     xn = concatenarSecuenciaX()[0]
+    xncopia = SenalDiscreta(xn.obtener_datos(), xn.obtener_indice_inicio(), xn.es_periodica())
 
-    print("xn:", xn)
     gn = obtener_Desplazamiento(xn, udsDesplazamiento.get())
-    print("xn:", xn)
+
+    # emparejarPuntosEjeHConInicio(gn)
+    # xncopia.empatar(gn)
 
     # Se realiza la operación
     operacion = "Desplazar"
     # Se configura la GUI
     print(gn)
-    configurarPantallaDeUnSoloValor(operacion, xn.obtener_datos(), gn.obtener_datos())
+    configurarPantallaDeUnSoloValor(operacion, xncopia.obtener_datos(), gn.obtener_datos())
     # Grafica
-    graficarSoloUna(puntosEjeH, gn, operacion)
+    print(xn)
+    print(gn)
+    print(xncopia)
+    graficarSolo2(range(gn.obtener_indice_inicio(), gn.obtener_longitud() + gn.obtener_indice_inicio()), xncopia.obtener_datos(), gn.obtener_datos(), operacion)
     ventana.mainloop()
 
+def desplazarAudio():
+    """
+    Comando asociado al botón 'Desplazar'
+    """
+    DesplazarCompletoAudio(udsDesplazamiento.get()*int(44100/2))
 
 def obtenerDesplazamiento():
     global puntosEjeH,newX,newX2
@@ -1001,6 +1031,38 @@ def grabarGUI():
     grabarAudio()
     senal = obtenerSenalDiscretaDesdeAudio()
     estadoGrabacion.set("Audio grabado")
+
+def reflejarEnX():
+    """
+    Comando asociado al botón 'Reflejo en X'
+    """
+    res = obtener_reflejoX(senal)
+    obtenerAudioDesdeSenalDiscreta(res)
+
+    emparejarPuntosEjeHConInicio(res)
+
+    graficarSolo2(puntosEjeH, senal.obtener_datos(), res.obtener_datos(), "Reflejo en x")
+
+def reflejarEnY():
+    """
+    Comando asociado al botón 'Reflejo en Y'
+    """
+    res = obtener_reflejoY(senal)
+    obtenerAudioDesdeSenalDiscreta(res)
+
+    emparejarPuntosEjeHConInicio(res)
+
+    graficarSolo2(puntosEjeH, senal.obtener_datos(), res.obtener_datos(), "Reflejo en x")
+
+from pydub import AudioSegment
+from pydub.playback import play
+def reproducirEntrada():
+    song = AudioSegment.from_wav("entrada.wav")
+    play(song)
+
+def reproducirSalida():
+    song = AudioSegment.from_wav("Salida.wav")
+    play(song)
 
 crearVentana()
 verInicio()

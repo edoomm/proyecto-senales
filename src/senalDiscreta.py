@@ -36,11 +36,11 @@ class SenalDiscreta:
     def obtener_indice_inicio (self) -> int:
         return self.indice_inicio
 
+    def asignar_indice_inicio (self, indice):
+        self.indice_inicio = indice
+
     def obtener_origen (self):
         return self.indice_inicio * -1
-
-    def asignar_indice_inicio (self, indice_inicio):
-        self.indice_inicio = indice_inicio
 
     # Se ajustan los tamanios de las seniales para que las dos tengan el mismo
     # tamanio y el mismo origen. Se modifican la señal local como la que se manda
@@ -124,14 +124,11 @@ class SenalDiscreta:
     def __str__(self):
         return str(self.datos) + " inicio: " + str(self.indice_inicio) + " periodica: " + str(self.periodica)
 
-#y = SenalDiscreta([1,2,3], 0, True)
-#print(y)
-#y.expandir_izquierda(2)
-#print(y)
-#y.expandir_izquierda(5)
-#print(y)
-
-#y.expandir_derecha(2)
-#print(y)
-#y.expandir_derecha(2)
-#print(y)
+# y = SenalDiscreta([1,2,3],0, True)
+# print(y)
+# y.expandir_izquierda(1)
+# print(y)
+# y.expandir_izquierda(1)
+# print(y)
+# y.expandir_izquierda(1)
+# print(y)
