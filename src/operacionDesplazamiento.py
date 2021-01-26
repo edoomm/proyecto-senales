@@ -25,8 +25,8 @@ def obtener_Desplazamiento(senal,tamanioDesplazamiento): #Desplazamientos si es 
 def DesplazarCompleto(tamanioDesplazamiento):
     senial=obtenerSenalDiscretaDesdeAudio()
     senial2=obtener_Desplazamiento(senial,tamanioDesplazamiento)
-    graficarSenalDiscretaDeAudio(senial,senial2)
     obtenerAudioDesdeSenalDiscreta(senial2)
+    graficarSenalDiscretaDeAudio(senial,senial2)
 
 # x = SenalDiscreta([1,2,3],-2,True)
 # print(obtener_Desplazamiento(x, 1, 4))
