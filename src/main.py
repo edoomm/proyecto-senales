@@ -524,36 +524,6 @@ def reflejarEnXyY():
 
     ventana.mainloop()
 
-def desplazar():
-    """
-    Comando asociado al botón "Desplazar"
-    """
-    # Obtiene datos de GUI
-    senales = concatenarSecuenciaX()
-    xn = senales[0]
-    td = udsDesplazamiento.get()
-    # Se realiza la operación
-    gn1 = obtener_Desplazamiento(xn, 1, td) # Desplazamiento a la derecha
-    gn2 = obtener_Desplazamiento(xn, 2, td) # Desplazamiento a la izquierda
-
-    # Emparejando
-    xn.empatar(gn1)
-    emparejarPuntosEjeHConInicio(xn)
-
-    print("xn:", xn)
-    print("gn1:", gn1)
-    print("gn2:", gn2)
-    print("pts:", puntosEjeH)
-
-
-    operacion = "Desplazamiento" # ------------------------LINEA A CAMBIAR
-    # Se configura la GUI
-    configurarPantalla(operacion, obtenerSecuencia("x", xn), obtenerSecuencia("gn1", gn1), obtenerSecuencia("gn2", gn2))
-    # Grafica
-    graficar(puntosEjeH, xn.obtener_datos(), gn1.obtener_datos(), gn2.obtener_datos(), operacion)
-
-    ventana.mainloop()
-
 def diezmar():
     """
     Comando asociado al botón "Diezmación"
@@ -592,7 +562,6 @@ def interpolar():
     graficarSolo2(range(gn.obtener_longitud()), xn.obtener_datos(), gn.obtener_datos(), operacion)
     ventana.mainloop()
     
-
 def diezmarAudio():
     """
     Comando asociado al botón "Diezmar" cuando la GUI está configurada para procesar audio
@@ -820,14 +789,19 @@ def concatenarSecuenciaX():
 def desplazar():
     global newX,newX2,puntosEjeH
 
-    obtenerDesplazamiento()
+    xn = concatenarSecuenciaX()[0]
+
+    print("xn:", xn)
+    gn = obtener_Desplazamiento(xn, udsDesplazamiento.get())
+    print("xn:", xn)
 
     # Se realiza la operación
     operacion = "Desplazar"
     # Se configura la GUI
-    configurarPantallaDeUnSoloValor(operacion, newX2,newX)
+    print(gn)
+    configurarPantallaDeUnSoloValor(operacion, xn.obtener_datos(), gn.obtener_datos())
     # Grafica
-    graficarSoloUna(puntosEjeH, newX, operacion)
+    graficarSoloUna(puntosEjeH, gn, operacion)
     ventana.mainloop()
 
 

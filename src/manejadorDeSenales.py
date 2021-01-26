@@ -50,7 +50,7 @@ def grabarAudio():
     wavefile.close()
      
 def obtenerSenalDiscretaDesdeAudio():
-    grabarAudio()
+    # grabarAudio()
     Fr, data = read("entrada.wav") #Leemos archivo obteniendo frecuencia y arreglo con canales
     l=[]    
     for i in range(len(data)):
