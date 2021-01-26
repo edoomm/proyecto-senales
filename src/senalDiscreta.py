@@ -36,6 +36,9 @@ class SenalDiscreta:
     def obtener_indice_inicio (self) -> int:
         return self.indice_inicio
 
+    def asignar_indice_inicio (self, indice):
+        self.indice_inicio = indice
+
     def obtener_origen (self):
         return self.indice_inicio * -1
 
