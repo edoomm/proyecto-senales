@@ -63,6 +63,14 @@ def obtenerSenalDiscretaDesdeAudio():
         l.append(data[i])
     return SenalDiscreta(l, 0, False) #Se toma como data solo el primer canal
 
+def obtenerAudioDesdeNumpy(senal):
+    wavefile = wave.open('Salida.wav','wb')
+    wavefile.setnchannels(canal)
+    wavefile.setsampwidth(audio.get_sample_size(formato))
+    wavefile.setframerate(frecuenciaDeMuestreo)
+    wavefile.writeframes(b''.join(senal))
+    wavefile.close()
+
 def obtenerAudioDesdeSenalDiscreta(senal):
     Fr, data = read("entrada.wav")
     datos = data

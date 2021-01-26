@@ -598,7 +598,7 @@ def interpolarAudio():
     ventana.mainloop()
 
 def desplazamientoAudio():
-    DesplazarCompleto(udsDesplazamiento.get()*44100)
+    DesplazarCompleto(udsDesplazamiento.get()*44100/2)
 
 # La falta de ortografia es adrede, porque ya existe la función sin falta de ortografia jaja
 def convolusionar():
@@ -644,7 +644,11 @@ def fft_audio():
     """
     Comando asociado al botón "FFT"
     """
-    graficarFFT2(obtenerNumpyDesdeAudio().obtener_datos())
+    T1N = graficarFFT2(obtenerNumpyDesdeAudio().obtener_datos())
+    obtenerAudioDesdeNumpy(T1N)
+    plt.subplot(121)
+    plt.plot(T1N)
+    plt.show()
     # ventana.mainloop()
 
 # TODO: Validar valores de las entradas

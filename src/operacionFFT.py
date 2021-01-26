@@ -27,6 +27,4 @@ def graficarFFT2(senial):
     T1N=T1/maximoT1
     recorte = T1N[6000:16000]
 
-    plt.subplot(121)
-    plt.plot(T1N)
-    plt.show()
+    return T1N
