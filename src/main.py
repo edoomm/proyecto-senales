@@ -256,7 +256,7 @@ def introducirValoresAudio():
            font=("Arial", 16)).place(x=xPosicion+160, y=espacio*3+yPosicion)
 
     Button(ventana, text="Desplazamiento", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=desplazamientoAudio,
+           bd=8, background="#ffb3cc", height=1, command=desplazarAudio,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*4+yPosicion)
 
     Entry(ventana,justify=CENTER, textvariable=udsDesplazamiento, width=4,
@@ -818,20 +818,30 @@ def desplazar():
     global newX,newX2,puntosEjeH
 
     xn = concatenarSecuenciaX()[0]
+    xncopia = SenalDiscreta(xn.obtener_datos(), xn.obtener_indice_inicio(), xn.es_periodica())
 
     gn = obtener_Desplazamiento(xn, udsDesplazamiento.get())
 
     emparejarPuntosEjeHConInicio(gn)
+    # xncopia.empatar(gn)
 
     # Se realiza la operación
     operacion = "Desplazar"
     # Se configura la GUI
     print(gn)
-    configurarPantallaDeUnSoloValor(operacion, xn.obtener_datos(), gn.obtener_datos())
+    configurarPantallaDeUnSoloValor(operacion, xncopia.obtener_datos(), gn.obtener_datos())
     # Grafica
-    graficarSoloUna(puntosEjeH, gn.obtener_datos(), operacion)
+    print(xn)
+    print(gn)
+    print(xncopia)
+    graficarSolo2(range(gn.obtener_indice_inicio(), gn.obtener_longitud() + gn.obtener_indice_inicio()), xncopia.obtener_datos(), gn.obtener_datos(), operacion)
     ventana.mainloop()
 
+def desplazarAudio():
+    """
+    Comando asociado al botón 'Desplazar'
+    """
+    DesplazarCompletoAudio(udsDesplazamiento.get()*int(44100/2))
 
 def obtenerDesplazamiento():
     global puntosEjeH,newX,newX2
@@ -1041,7 +1051,6 @@ def reflejarEnY():
 
 from pydub import AudioSegment
 from pydub.playback import play
-
 def reproducirEntrada():
     song = AudioSegment.from_wav("entrada.wav")
     play(song)
