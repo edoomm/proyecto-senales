@@ -419,8 +419,23 @@ def sumar():
     senales = emparejarValores()
     xn = senales[0]
     hn = senales[1]
+    # Desarrolla expansión para periocidad
+    if xn.es_periodica():
+        xn.expandir_periodo_izquierda(1)
+        xn.expandir_periodo_derecha(1)
+        hn.empatar(xn)
+
+    if hn.es_periodica():
+        hn.expandir_periodo_izquierda(1)
+        hn.expandir_periodo_derecha(1)
+        xn.empatar(hn)
+        
+    emparejarPuntosEjeHConInicio(xn)
+
     # Se realiza la operación
     gn = obtenerSuma(xn, hn) # ------------------LINEA A CAMBIAR
+    gn.empatar(xn)
+    gn.empatar(hn)
 
     operacion = "Suma" # ------------------------LINEA A CAMBIAR
     # Se configura la GUI
@@ -699,8 +714,8 @@ def emparejarValores():
 
     print(xls)
     print(xrs)
-    xn = SenalDiscreta(xls + [int(xO.get())] + xrs, indice_x, xesperiodica.get())
-    hn = SenalDiscreta(hls + [int(xO.get())] + hrs, indice_h, hesperiodica.get())
+    xn = SenalDiscreta(xls + [float(xO.get())] + xrs, indice_x, xesperiodica.get())
+    hn = SenalDiscreta(hls + [float(hO.get())] + hrs, indice_h, hesperiodica.get())
     
     xn.empatar(hn)
 
