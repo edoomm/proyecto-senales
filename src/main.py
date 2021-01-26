@@ -266,11 +266,11 @@ def introducirValoresAudio():
           font=("Arial", 10)).place(x=400, y=425)
 
     Button(ventana, text="Diezmación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=diezmar,
+           bd=8, background="#ffb3cc", height=1, command=diezmarAudio,
            font=("Arial", 16)).place(x=xPosicion, y=espacio*5+yPosicion)
 
     Button(ventana, text="Interpolación", cursor="hand2",
-           bd=8, background="#ffb3cc", height=1, command=interpolar,
+           bd=8, background="#ffb3cc", height=1, command=interpolarAudio,
            font=("Arial", 16)).place(x=xPosicion+145, y=espacio*5+yPosicion)
 
     Button(ventana, text="FFT", cursor="hand2",
@@ -282,13 +282,7 @@ def introducirValoresAudio():
     ventana.mainloop()
 
 def tests():
-    """
-    Función para hacer pruebas solamente
-    """
-
-    estadoGrabacion.set("Grabando...")
-    senal = obtenerSenalDiscretaDesdeAudio()
-    estadoGrabacion.set("Audio grabado")
+    print("test")
 
 def emparejarPuntosEjeHConInicio(senal):
     """
@@ -305,7 +299,6 @@ def emparejarPuntosEjeHConInicio(senal):
 def configurarPantalla(operacion, resx, resh, resg):
     """
     Configura la pantalla dependiendo que operación se haga
-
     Parameters:
         operacion (str): El título de la operación realizada
         resx (str): La secuencia de la señal x(n) con formato {...,#,#,..}
@@ -344,7 +337,6 @@ y una de salida
 def configurarPantallaDeUnSoloValor(operacion, xn, gn):
     """
     Configura la pantalla dependiendo que operación se haga
-
     Parameters:
         operacion (str): El título de la operación realizada
         resx (str): La secuencia de la señal x(n) con formato {...,#,#,..}
@@ -399,11 +391,9 @@ def configurarPantallaDeUnSoloValor(operacion, xn, gn):
 def obtenerSecuencia(variable, senal):
     """
     Obtiene la secuencia de una señal dada
-
     Parameters:
         variable (str): La letra de la variable de la señal
         senal (SenialDiscreta): La señal discreta
-
     Returns:
         str: Secuencia de una señal en formato {...,#,...}
     """
@@ -417,7 +407,6 @@ def obtenerSecuencia(variable, senal):
 
     return secuencia
 
-# Esta función será el modelo a seguir para las demas operaciones
 def sumar():
     """
     Comando asociado al botón "Sumar"
@@ -426,8 +415,23 @@ def sumar():
     senales = emparejarValores()
     xn = senales[0]
     hn = senales[1]
+    # Desarrolla expansión para periocidad
+    if xn.es_periodica():
+        xn.expandir_periodo_izquierda(1)
+        xn.expandir_periodo_derecha(1)
+        hn.empatar(xn)
+
+    if hn.es_periodica():
+        hn.expandir_periodo_izquierda(1)
+        hn.expandir_periodo_derecha(1)
+        xn.empatar(hn)
+        
+    emparejarPuntosEjeHConInicio(xn)
+
     # Se realiza la operación
     gn = obtenerSuma(xn, hn) # ------------------LINEA A CAMBIAR
+    gn.empatar(xn)
+    gn.empatar(hn)
 
     operacion = "Suma" # ------------------------LINEA A CAMBIAR
     # Se configura la GUI
@@ -445,8 +449,22 @@ def restar():
     senales = emparejarValores()
     xn = senales[0]
     hn = senales[1]
+    # Desarrolla expansión para periocidad
+    if xn.es_periodica():
+        xn.expandir_periodo_izquierda(1)
+        xn.expandir_periodo_derecha(1)
+        hn.empatar(xn)
+
+    if hn.es_periodica():
+        hn.expandir_periodo_izquierda(1)
+        hn.expandir_periodo_derecha(1)
+        xn.empatar(hn)
+        
+    emparejarPuntosEjeHConInicio(xn)
     # Se realiza la operación
     gn = obtenerResta(xn, hn) # ------------------LINEA A CAMBIAR
+    gn.empatar(xn)
+    gn.empatar(hn)
 
     operacion = "Restar" # -----------------------LINEA A CAMBIAR
     # Se configura la GUI
@@ -571,6 +589,38 @@ def interpolar():
     gn.empatar(xn)
     graficarSolo2(range(gn.obtener_longitud()), xn.obtener_datos(), gn.obtener_datos(), operacion)
     ventana.mainloop()
+    
+
+def diezmarAudio():
+    """
+    Comando asociado al botón "Diezmar" cuando la GUI está configurada para procesar audio
+    """
+    xn = SenalDiscreta(senal.obtener_datos().copy().tolist(), 0, False)
+    operacion = "Diezmación"
+    factor = int(factorInterpolacionDiezmacion.get())
+    # Se realiza la operación
+    gn = obtenerDiezmacion(xn, factor)
+    # Grafica
+    gn.asignar_indice_inicio(0)
+    gn.empatar(xn)
+    graficarInterpolacionDiezmacion(xn.obtener_datos(), gn.obtener_datos(), operacion, factor)
+    ventana.mainloop()
+    obtenerAudioDesdeSenalDiscreta(gn)
+
+def interpolarAudio():
+    """
+    Comando asociado al botón "Interpolar" cuando la GUI está configurada para procesar audio
+    """
+    xn = SenalDiscreta(senal.obtener_datos().copy().tolist(), 0, False)
+    operacion = "Interpolación"
+    factor = int(factorInterpolacionDiezmacion.get())
+    # Se realiza la operación
+    gn = obtenerInterpolacion(xn, factor)
+    # Grafica
+    gn.empatar(xn)
+    graficarInterpolacionDiezmacion(xn.obtener_datos(), gn.obtener_datos(), operacion, factor)
+    ventana.mainloop()
+    obtenerAudioDesdeSenalDiscreta(gn)
 
 # La falta de ortografia es adrede, porque ya existe la función sin falta de ortografia jaja
 def convolusionar():
@@ -617,13 +667,12 @@ def fft():
     ventana.mainloop()
 
 # TODO: Validar valores de las entradas
+# TODO: Cambiar lógica para señales periodicas y no periodicas
 def emparejarValores():
     
     '''Hace las listas correspondientes a x(n) y h(n) del mismo tamaño y las asigna newX y newH así como prepara los puntos en el eje horizontal de las gráficas para su posterior ploteo
-
     Returns:
         SenialDiscreta:Devuelve una tupla con objetos de SenialDiscreta que representan a x(n) (posición: 0) y h(n) (posición: 1)
-
     '''
 
     global puntosEjeH,newX,newH
@@ -636,23 +685,13 @@ def emparejarValores():
     xRAux = xR.get().split(",")
 
     # Se resetea newX, newH y puntosEjeH
-    newX = []
     newH = []
     puntosEjeH = []
 
-    if len(hLAux)>len(xLAux):
-        for i in range(len(hLAux)-len(xLAux)):
-            newX.append(float(0))
     if len(xLAux)>len(hLAux):
         for i in range(len(xLAux)-len(hLAux)):
             newH.append(float(0))
 
-    for elemento in xLAux:
-        if elemento != "":
-            newX.append(float(elemento))
-        else:
-            newX.append(float(0))
-    newX.append(float(xO.get()))
     for elemento in hLAux:
         if elemento != "":
             newH.append(float(elemento))
@@ -672,37 +711,54 @@ def emparejarValores():
     #debe de invertir para que quede como en una
     #grafica normal
     puntosEjeH.reverse()
-
-    for elemento in xRAux:
-        if elemento != "":
-            newX.append(float(elemento))
-        else:
-            newX.append(float(0))
+    
     for elemento in hRAux:
         if elemento != "":
             newH.append(float(elemento))
         else:
             newH.append(float(0))
-
-    if len(hRAux) > len(xRAux):
-        for i in range(len(hRAux) - len(xRAux)):
-            newX.append(float(0))
-    if len(xRAux) > len(hRAux):
-        for i in range(len(xRAux) - len(hRAux)):
+            
+    for i in range(len(xRAux) - len(hRAux)):
             newH.append(float(0))
     for i in range(len(newH)-len(puntosEjeH)):
         puntosEjeH.append(i+1)
 
-    # Cálculo del indice de inicio de las listas
-    iinicio = 0
-    if len(xLAux) != 0 and len(hLAux) != 0:
-        if len(xLAux) > len (hLAux):
-            iinicio = -len(xLAux)
-        else:
-            iinicio = -len(hLAux) 
+    # Se convierten listas para x
+    xls = []
+    xrs = []
+    for i in xLAux:
+        if i != '':
+            xls.append(float(i))
+    for i in xRAux:
+        if i != '':
+            xrs.append(float(i))
+    # Se convierte listas para h
+    hls = []
+    hrs = []
+    for i in hLAux:
+        if i != '':
+            hls.append(float(i))
+    for i in hRAux:
+        if i != '':
+            hrs.append(float(i))
+    
+    # Obteniendo datos para x
+    indice_x = 0
+    if len(xLAux) > 0:
+        if xLAux[0] != '':
+            indice_x = -len(xLAux)
+    indice_h = 0
+    if len(xRAux) > 0:
+        if xRAux[0] != '':
+            indice_h = -len(hLAux)
 
-    xn = SenalDiscreta(newX, iinicio, xesperiodica.get())
-    hn = SenalDiscreta(newH, iinicio, hesperiodica.get())
+    print(xls)
+    print(xrs)
+    xn = SenalDiscreta(xls + [float(xO.get())] + xrs, indice_x, xesperiodica.get())
+    hn = SenalDiscreta(hls + [float(hO.get())] + hrs, indice_h, hesperiodica.get())
+    
+    xn.empatar(hn)
+
     return [xn, hn]
 
 
@@ -714,10 +770,8 @@ no necesita ser acompletada con 0´s
 def concatenarSecuenciaX():
     
     '''Hace las listas correspondientes a x(n) y h(n) del mismo tamaño y las asigna newX y newH así como prepara los puntos en el eje horizontal de las gráficas para su posterior ploteo
-
     Returns:
         SenialDiscreta:Devuelve una tupla con objetos de SenialDiscreta que representan a x(n) (posición: 0) y h(n) (posición: 1)
-
     '''
 
     global puntosEjeH,newX
@@ -861,6 +915,7 @@ def grabarGUI():
     Graba el audio en la GUI
     """
     estadoGrabacion.set("Grabando...")
+    global senal
     senal = obtenerSenalDiscretaDesdeAudio()
     estadoGrabacion.set("Audio grabado")
 
